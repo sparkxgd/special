@@ -1,0 +1,91 @@
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/opStudentpayOrder" method="post">
+	<div class="searchBar">
+		<ul class="searchContent">
+			<li>
+				<label>学生：</label>
+				<input type="text" name="searchKey"/>
+			</li>
+		</ul>
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">点击查询
+
+</button></div></div></li>
+			</ul>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="edit" href="/admin/open_studentpay?orderIDs={sid}&navTabId=${(navTabId)!}" target="navTab" rel="orderIds" postType="string" mask="true" warn="请选择一信息"  title="学生交费"><span>学生交费</span></a></li>
+			<li><a class="edit" href="../admin/openRgorderDiscount?id={sid}&navTabId=${(navTabId)!}" target="dialog"  mask="true" title="修改优惠金额" width="800" height="315"><span>修改优惠金额</span></a></li>
+			<li><a class="edit" href="../admin/openExitCost?id={sid}&navTabId=${(navTabId)!}" target="dialog"  mask="true" title="退费" width="800" height="340"><span>退费</span></a></li>
+		
+		</ul>
+	</div>
+	<table class="list" layoutH="116">
+		<thead>
+			<tr>
+				<th width="22"><input type="checkbox" group="orderIds" class="checkboxCtrl"></th>
+				<th width="100">学生</th>
+				<th width="150">报名时间</th>
+				<th width="100">报读科目</th>
+				<th width="100">报读课时</th>
+				<th width="100">报读类型</th>
+				<th width="100">报读年级</th>
+				<th width="100">产品总价</th>
+				<th width="100">应缴费用</th>
+				<th width="100">实缴金额</th>
+				<th width="100">优惠金额</th>
+				<th width="100">未收金额</th>
+				<th width="240">备注</th>
+				<th width="100">操作</th>
+				
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target="sid" rel="${(d.id)!}">
+				<td><input name="orderIds" value='${(d.id)!}' type='checkbox'></td>
+				<td>${(d.studentName)!}</td>
+				<td>${(d.regTime)!}</td>
+				<td>${(d.subjectName)!}</td>
+				<td>${(d.regNumber)!}</td>
+				<td>${(d.classTypeName)!}</td>
+				<td>${(d.gradeName)!}</td>
+				<td>${(d.total)!}</td>
+				<td>${(d.mustCost)!}</td>
+				<td>${(d.actualCost)!}</td>
+				<td>${(d.discountCost)!}</td>
+				<td>${(d.mustCost-d.actualCost)!}</td>
+				<td>${(d.remark)!}</td>
+				<td>
+					<a class="btnView" href="../admin/regorderDetail?id=${(d.id)!}&navTabId=${(navTabId)!}" target="navTab" mask="true" title="交费明细">交费明细</a>
+				</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" 
+
+pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

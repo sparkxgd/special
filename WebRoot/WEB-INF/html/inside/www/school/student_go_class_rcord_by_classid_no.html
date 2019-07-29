@@ -1,0 +1,86 @@
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/studentGoClassRcordByClassAndNo" method="post">
+	<div class="searchBar">
+		<ul class="searchContent">
+			<li>
+				<label>学生姓名：</label>
+				<input type="text" name="searchKey"/>
+				<input type="hidden" name="classId"/>
+				<input type="hidden" name="no"/>
+			</li>
+		</ul>
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">点击查询
+
+</button></div></div></li>
+			</ul>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="edit" height="350" width="800" href="/admin/openStudentSignUpdate?id={sid}&navTabId=${(navTabId)!}" target="dialog" mask="true" warn="请选择一信息"  title="修改信息"><span>修改签到</span></a></li>
+		</ul>
+	</div>
+	<table class="list" layoutH="116">
+		<thead>
+			<tr>
+				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th width="100">学生</th>
+				<th width="150">班级</th>
+				<th width="70">第几课时</th>
+				<th width="150">上课时间</th>
+				<th width="150">下课时间</th>
+				<th width="100">上课教室</th>
+				<th width="150">上课教师</th>
+				<th width="70">上课类型</th>
+				<th width="70">签到</th>
+				<th width="150">签到时间</th>
+				<th width="70">是否有效</th>
+				<th width="100">备注</th>
+				
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target='sid' rel="${(d.id)!}">
+				<td><input name='ids' value='${(d.id)!}' type='checkbox'></td>
+				<td>${(d.studentName)!}</td>
+				<td>${(d.className)!}</td>
+				<td>${(d.no)!}</td>
+				<td>${(d.gotime)!}</td>
+				<td>${(d.overTime)!}</td>
+				<td>${(d.classroom)!}</td>
+				<td>${(d.employeeName)!}</td>
+				<td>${(d.typeStr)!}</td>
+				<td>${(d.loginStr)!}</td>
+				<td>${(d.createTime)!}</td>
+				<td>${(d.availdStr)!}</td>
+				<td>${(d.remark)!}</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" 
+
+pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

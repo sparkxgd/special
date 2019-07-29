@@ -1,0 +1,58 @@
+<div class="pageContent" style="height:overflow: auto;">
+	<form method="post" action="/admin/classInfoSave"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+					<label>班级名称:</label>
+					<input name="name" class="required" type="text" size="30" />
+					<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+				</p>
+				<p>
+					<label>科目:</label>
+					<input name="s.id" value="" type="hidden" class="required"/>
+					<input class="required" name="s.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookSubjec" lookupGroup="s"/>
+				</p>
+				<p>
+					<label>年级:</label>
+					<input name="g.id" value="" type="hidden" class="required"/>
+					<input class="required" name="g.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookGrade" lookupGroup="g"/>
+				</p>
+				<p>
+					<label>班级类型:</label>
+					<input name="c.id" value="" type="hidden" class="required"/>
+					<input class="required" name="c.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookClassType" lookupGroup="c"/>
+				</p>
+				<p>
+					<label>班主任:</label>
+					<input name="e.id" value="" type="hidden" class="required"/>
+					<input class="required" name="e.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookEmployee" lookupGroup="e"/>
+				</p>
+				<p>
+					<label>上课时间段:</label>
+					<input name="t.id" value="" type="hidden" class="required"/>
+					<input class="required" name="t.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookTimeslot" lookupGroup="t"/>
+				</p>
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

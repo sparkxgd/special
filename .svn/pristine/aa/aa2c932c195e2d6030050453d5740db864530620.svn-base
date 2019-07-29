@@ -1,0 +1,27 @@
+<h2 class="contentTitle">智行公交apk文件上传</h2>
+<div class="pageContent" layoutH="50">
+		<input id="testFileInput" type="file"
+		uploaderOption="{
+			swf:'../resources/framework/dwz_jui/uploadify/scripts/uploadify.swf',
+			uploader:'../upload/uploadApk',
+			buttonText:'请选择文件',
+			fileSizeLimit:'50000KB',
+			fileTypeDesc:'*.apk;*.APK;',
+			fileTypeExts:'*.apk;*.APK;',
+			fileObjName:'ZhiXingBus',
+			auto:false,
+			multi:false,
+			queueID:'apkname',
+			onUploadSuccess:uploadifySuccess,
+			onQueueComplete:uploadifyQueueComplete
+		}"
+	/>
+
+	
+	  <div id="apkname" class="fileQueue"></div>
+  
+  <input type="image" src="../resources/framework/dwz_jui/uploadify/img/upload.jpg" onclick="$('#testFileInput').uploadify('upload', '*');"/>
+  <input type="image" src="../resources/framework/dwz_jui/uploadify/img/cancel.jpg" onclick="$('#testFileInput').uploadify('cancel', '*');"/>
+  <div class="divider"></div>
+  <h2 class="contentTitle">${(uploadUrl)!}</h2>
+</div>

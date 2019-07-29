@@ -1,0 +1,61 @@
+<form action="/admin/studentRegistrationSave?navTabId=${(navTabId)!}" method="post" class="pageForm" onsubmit="return validateCallback(this, navTabAjaxDone)">
+<div class="pageContent">
+	<div class="pageFormContent" layoutH="56">
+		
+		<dl class="nowrap">
+			<dt>学生姓名：</dt>
+			<dd>
+				<input name="student.id" value="" type="hidden" />
+				<input class="required" name="student.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookStudent" lookupGroup="student"/>
+				<a class="btnLook" href="/admin/dwzOrgLookup" lookupGroup="student">查找带回</a>	
+				<label>老生</label>
+			</dd>
+		</dl>
+		<div class="divider"></div>
+		
+		<div class="tabs">
+			<div class="tabsHeader">
+				<div class="tabsHeaderContent">
+					<ul>
+						<li class="selected"><a href="javascript:void(0)"><span>学生报读科目清单</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="tabsContent" style="height: 150px;">
+				<div>
+					<table class="list nowrap itemDetail" addButton="添加报读科目信息" width="100%">
+						<thead>
+							<tr>
+								<th type="lookup" name="items[#index#].subjec.name" lookupGroup="items[#index#].subjec" suggestUrl="/admin/lookSubjec" suggestFields="id,name" postField="name" size="12" fieldClass="required">报读科目</th>
+								<th type="lookup" name="items[#index#].grade.name" lookupGroup="items[#index#].grade" suggestUrl="/admin/lookGrade" suggestFields="id,name" postField="name" size="12" fieldClass="required">报读年级</th>
+								<th type="lookup" name="items[#index#].classType.name" lookupGroup="items[#index#].classType" suggestUrl="/admin/lookClassType" suggestFields="id,name" postField="name" size="12" fieldClass="required">报读类型</th>
+								<th type="text" name="items[#index#].regNumber" defaultVal="8" size="12" fieldClass="number">报读课时</th>
+								<th type="text" name="items[#index#].total" defaultVal="0" size="12" fieldClass="number">产品总价</th>
+								<th type="text" name="items[#index#].mustCost" defaultVal="0" size="12" fieldClass="number">应缴费用</th>
+								<th type="text" name="items[#index#].actualCost" defaultVal="0" size="12" fieldClass="number">实缴金额</th>
+								<th type="text" name="items[#index#].discountCost" defaultVal="0" size="12" fieldClass="number">优惠金额</th>
+								<th type="text" name="items[#index#].uncollected" defaultVal="0" size="12" fieldClass="number">未收金额</th>
+								<th type="text" name="items[#index#].remark" defaultVal="" size="12" fieldClass="number">备注</th>
+								<th type="del" width="60">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tabsFooter">
+				<div class="tabsFooterContent"></div>
+			</div>
+		</div>
+		
+	</div>
+	<div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button class="close" type="button">关闭</button></div></div></li>
+		</ul>
+	</div>
+</div>
+</form>

@@ -1,0 +1,101 @@
+<style type="text/css">
+.html_p p{
+	padding: 5px;
+	line-height:20px;
+}
+.myspan{
+	background-color: #B8D0D6;
+	width: 100px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	text-align:center;
+	display:inline-block;
+}
+</style>
+<div class="pageContent"  layouth="20">
+	<h2 class="contentTitle">基本信息</h2>
+	<div class="pageFormContent">
+	<p>
+		<span class="myspan">id：</span>
+		<span>${model.id}</span>
+	</p>
+	<p>
+		<span class="myspan">标题：</span>
+		<span>${model.title}</span>
+	</p>
+	<p>
+		<span class="myspan">类型：</span>
+		<span>${(model.dec)!}</span>
+	</p>
+	<p>
+		<span class="myspan">作者：</span>
+		<span>${(model.author)!}</span>
+	</p>
+	<p>
+		<span class="myspan">编写时间：</span>
+		<span>${(model.createTime)!}</span> 
+	</p>
+	<p>
+		<span class="myspan">发布时间：</span>
+		<span>${(model.publishTime)!}</span> 
+	</p>
+	<p>
+		<span class="myspan">阅读数：</span>
+		<span>${(model.readNum)!}</span>
+	</p>
+	<p>
+		<span class="myspan">评论数：</span>
+		<span>${(model.commentsNun)!}</span>
+	</p>
+	<p>
+		<span class="myspan">通知级别：</span>
+		<span>${(model.levelStr)!}</span>
+	</p>
+	<p>
+		<span class="myspan">状态：</span>
+		<span>${(model.stateStr)!}</span>
+	</p>
+	<p>
+		<span class="myspan">是否允许评论：</span>
+		<span>${(model.isCommentStr)!}</span>
+	</p>
+	<p>
+		<span class="myspan">备注：</span>
+		<span>${(model.remark)!}</span>
+	</p>
+	</div>
+	<div>
+		<h2 class="contentTitle">摘要：${(model.summary)!}</h2>
+	</div>
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="/admin/news_update_state?state=1&id=${(model.id)!}&navTabId=new_view"
+				target="ajaxTodo" mask="true" title="你确定要发布《${(model.title)!}》这篇文章吗？"><span>立即发布</span></a></li>
+			<li><a class="edit" href="/admin/news_update_state?state=2&id=${(model.id)!}&navTabId=new_view"
+				target="ajaxTodo" title="你确定要下降《${(model.title)!}》这篇文章吗？" warn="请选择一条信息" mask="true"><span>文章下架</span></a></li>
+			<#if model.isComment==1>
+			<li><a class="edit" href="/admin/controlNewsComments?hop=1&id=${(model.id)!}&navTabId=new_view"
+				target="ajaxTodo" title="你确定要关闭《${(model.title)!}》这篇文章的评论吗？" warn="请选择一条信息" mask="true"><span>关闭评论</span></a></li>
+			<#else>
+			<li><a class="edit" href="/admin/controlNewsComments?hop=2&id=${(model.id)!}&navTabId=new_view"
+				target="ajaxTodo" title="你确定要打开《${(model.title)!}》这篇文章的评论吗？" warn="请选择一条信息" mask="true"><span>打开评论</span></a></li>
+			
+			</#if>
+			<li><a href="/see?id=${model.id}&type=${model.type}" target="_blank"><span>查看前端显示</span></a></li>	
+		</ul>
+	</div>
+	<div class="html_p">
+		<h2 class="contentTitle">文章内容</h2>
+		${(model.content)!}
+	</div>
+	<div class="formBar">
+			<ul>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">关闭本页面</button>
+						</div>
+					</div></li>
+			</ul>
+	</div>
+</div>

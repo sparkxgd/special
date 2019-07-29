@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>贵州中科汉天下信息技术有限公司_官网</title>
+<meta name="keywords" content="汉天下，中科汉天下，贵州中科汉天下，贵州中科汉天下信息技术有限公司，贵州，贵阳，凯里，高新区，大数据，智行，智行公交，公交" />
+<meta name="description" content="汉天下，中科汉天下，贵州中科汉天下，贵州中科汉天下信息技术有限公司，贵州，贵阳，凯里，高新区，大数据，智行，智行公交，公交" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" /> 
+<link rel="shortcut icon" href="../resources/favicon.ico"/>
+<link href="../resources/framework/zhongkehan/JsCss/css.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../resources/framework/zhongkehan/JsCss/setimg.js"></script>
+<!--[if IE 6]>
+<script src='JsCss/iepng.js' type='text/javascript'></script>
+<script type='text/javascript'>
+   EvPNG.fix('*'); 
+</script>
+<![endif]-->
+</head>
+<body>
+	<div class="Top"></div>
+	<div class="Head">
+		<img src="../resources/framework/zhongkehan/images/logo.gif" alt="中科汉天下" title="中科汉天下"/>
+		<div class="weibo"></div>
+	</div>
+	
+<div class="Banner" style="background:url(../resources/framework/zhongkehan/images/banner.gif) no-repeat top;"></div>
+
+	<div class="Nav">
+		${(menu)!}
+	</div>
+	<div class="Main"><img src="../resources/framework/zhongkehan/images/t_pic.gif" align="top" alt="" title="" /></div>
+        <div class="Main">
+            <div class="Left">
+				${(leftMenus)!}                
+			<h2 class="I_h2"><strong>友情链接</strong>CORE ENTERPRISE</h2>
+			${(coop)!}		
+			<div class="Pic1"><a href="javascript:alert('系统正在升级。。。。')" title="智行公交"><img src="../resources/framework/zhongkehan/images/l_1.gif" alt="智行公交" title="智行公交" /></a></div>
+			<div class="Pic1"><a href="javascript:alert('系统正在升级。。。。')" title="智行公交"><img src="../resources/framework/zhongkehan/images/l_2.gif" alt="智行公交" title="智行公交" /></a></div>
+
+            </div>
+            <div class="Right">
+                <h2 class="R-h2">${(menuName)!}</h2>
+                <div class="Con">
+					${(content)!}  
+                </div>
+            </div>
+        </div>
+
+	<div class="Bottom">
+		<p><a href="#" title="人才中心">人才中心</a>|<a href="#" title="联系我们">联系我们</a>|<a href="#" title="网站导航">网站导航</a>|<a href="#" title="法律声明">法律声明</a></p>
+				Copyright 2014-2016 贵州中科汉天下信息技术有限公司 版权所有 <br />地址:贵阳市高新区研发基地4号楼15层 电话:0851-84393936  邮箱:hr@huntersun-info.com 邮编:550000&nbsp;技术支持：<a href="http://www.zhixingbus.com/" target="_blank">智行公交</a><br />
+	</div>
+<script type="text/javascript" src="../resources/framework/zhongkehan/JsCss/jquery.js"></script>
+<script type="text/javascript"> 
+$(document).ready(function(){
+	$(".Nav ul li a").mouseover(function() { //When trigger is clicked...
+		//Following events are applied to the subnav itself (moving subnav up and down)
+		$(this).parent().find(".subnav").slideDown('fast').show(); //Drop down the subnav on click
+		$(this).parent().hover(function() {
+		}, function(){	
+			$(this).parent().find(".subnav").slideUp('slow'); //When the mouse hovers out of the subnav, move it back up
+		});
+		//Following events are applied to the trigger (Hover events for the trigger)
+		})
+});
+</script>
+<script type="text/javascript" src="../resources/framework/zhongkehan/JsCss/roll.js"></script> 
+<script type="text/javascript">
+	function setTab(m,n){
+	var menu=document.getElementById("tab"+m).getElementsByTagName("span");   //获取ID为tab+m标签下的li标签
+	var showdiv=document.getElementById("tablist"+m).getElementsByTagName("ul");   //获取ID为tablist+m标签下的div标签
+	for(i=0;i<menu.length;i++)
+	{
+		menu[i].className=i==n?"on":"";   //如果i=n;那么menu[i].classname为now
+		showdiv[i].style.display=i==n?"block":"none";   //如果如果i=n;那么showdiv[i].style.display为block"
+	}
+	};
+	//鼠标经过切换父div背景
+	$(function(){
+		$("#T1").mouseover( 
+			function () { 
+				$(this).parent("div").removeClass("N_li");  
+			});
+		$("#T2").mouseover( 
+			function () { 
+				$(this).parent("div").addClass("N_li");   //鼠标经过时增加样式N_li
+			});
+	});
+	//鼠标经过li切换背景、字体 颜色
+	$(".tablist1 li").hover( 
+		function () { 
+			$(this).addClass("li_color");   //鼠标经过时增加样式P02
+		}, 
+		function () { 
+			$(this).removeClass("li_color"); //鼠标离开时移除样式P02
+		}
+	);
+</script>
+</body>
+</html>

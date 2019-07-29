@@ -1,0 +1,1622 @@
+package com.zhixingbus.server.controller;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.plugin.activerecord.Page;
+import com.zhixingbus.server.bean.DwzResult;
+import com.zhixingbus.server.config.Constans;
+import com.zhixingbus.server.constants.ArticleLevel;
+import com.zhixingbus.server.interceptor.AdminInterceptor;
+import com.zhixingbus.server.model.AdminModel;
+import com.zhixingbus.server.model.ArticleModel;
+import com.zhixingbus.server.model.ArticleTypeModel;
+import com.zhixingbus.server.model.CommentsModel;
+import com.zhixingbus.server.model.ConfigModel;
+import com.zhixingbus.server.model.CooperationModel;
+import com.zhixingbus.server.model.DownloadModel;
+import com.zhixingbus.server.model.MasterplatCssModel;
+import com.zhixingbus.server.model.MasterplateModel;
+import com.zhixingbus.server.model.MenuModel;
+import com.zhixingbus.server.model.SuggestModel;
+import com.zhixingbus.server.model.VisitorModel;
+import com.zhixingbus.server.service.FileService;
+import com.zhixingbus.server.utils.CookieUtils;
+import com.zhixingbus.server.utils.MD5Util;
+import com.zhixingbus.server.utils.StringUtil;
+import com.zhixingbus.server.utils.Utils;
+import com.zhixingbus.server.utils.WebUtil;
+
+@Before(AdminInterceptor.class)
+public class AdminController extends BaseController {
+	/**
+	 * 用户登录
+	 */
+	@ClearInterceptor
+	public void login() {
+		String username = getPara("username");
+		String password = getPara("password");
+		if (StringUtil.isBlankOrEmpty(username) && StringUtil.isBlankOrEmpty(password)) {
+			setAttr("error", "请输入用户名和密码！");
+			render("inside/login.html");
+			return;
+		} else if (StringUtil.isBlankOrEmpty(username)) {
+			setAttr("error", "错误！用户名不能为空！");
+			render("inside/login.html");
+			return;
+		} else if (StringUtil.isBlankOrEmpty(password)) {
+			setAttr("error", "错误！密码错误！");
+			render("inside/login.html");
+			return;
+		}
+		AdminModel admin = AdminModel.findByName(username);
+		if (admin == null) {
+			setAttr("error", "错误！没有该用户名！");
+			render("inside/login.html");
+			return;
+		}
+
+		String md5Password = MD5Util.string2MD5(password);
+
+		if (admin.getPassword().equals(md5Password)) { // 密码正确
+			String cookieString = CookieUtils.createUserLoginCookieString(username, md5Password);
+			setCookie(Constans.cookieName, cookieString, Constans.cookie_active_time);
+			redirect("/admin/main");
+		} else {
+			// 密码错误
+			setAttr("error", "错误！密码错误！");
+			render("inside/login.html");
+			return;
+		}
+	}
+
+	/**
+	 * 用户退出登录
+	 */
+	public void loginout() {
+		removeCookie(Constans.cookieName);
+		render("inside/login.html");
+	}
+
+	/**
+	 * 登录成功的首页
+	 */
+	public void main() {
+		String userName=CookieUtils.getNameFromCookie(getCookie(Constans.cookieName));
+		setAttr("userName", userName);
+		render("inside/index.html");
+	}
+
+	/**
+	 * 只是用来显示后台的左边iframe的页面
+	 */
+	public void left() {
+		String name = CookieUtils.getNameFromCookie(getCookie("admin"));
+		setAttr("name", name);
+		render("left.html");
+	}
+
+	/**
+	 * 添加新闻页面
+	 */
+	public void news_add() {
+		
+		String navTabId=getPara("navTabId");
+		String id = Utils.createNewUUID();
+		List<MenuModel> list = MenuModel.getShowMenuList();
+		StringBuffer sb = new StringBuffer("<select  name='type'>");
+		for (MenuModel m : list) {
+			sb.append("<option value='").append(m.getId()).append("'>").append(m.getname()).append("</option>");
+		}
+		sb.append("</select>");
+		StringBuffer select = new StringBuffer();
+		ArticleLevel.createSelect(select, "level", 0);
+		setAttr("level", select.toString());
+		setAttr("type_option", sb.toString());
+		setAttr("navTabId", navTabId);
+		setAttr("id", id);
+		render("inside/www/news_add.html");
+	}
+
+	/**
+	 * 新闻修改页面
+	 */
+	public void news_editor() {
+		String id = getPara("id");
+		String navTabId=getPara("navTabId");
+		List<MenuModel> list = MenuModel.getShowMenuList();
+		ArticleModel model = new ArticleModel();
+		model = ArticleModel.getById(id);
+		StringBuffer sb = new StringBuffer("<select  name='type'>");
+		for (MenuModel m : list) {
+			if (m.getId() == model.gettype()) {
+				sb.append("<option value='").append(m.getId()).append("' selected='selected'>").append(m.getname()).append("</option>");
+			} else
+				sb.append("<option value='").append(m.getId()).append("'>").append(m.getname()).append("</option>");
+		}
+		sb.append("</select>");
+		StringBuffer select = new StringBuffer();
+		ArticleLevel.createSelect(select, "level", model.getlevel());
+		setAttr("model", model);
+		setAttr("type_option", sb.toString());
+		setAttr("level", select.toString());
+		setAttr("navTabId", navTabId);
+		render("inside/www/news_editor.html");
+	}
+
+	/**
+	 * 查看新闻详情页面
+	 */
+	public void news_view() {
+		String id = getPara("id");
+		ArticleModel model = new ArticleModel();
+		model = ArticleModel.getById(id);
+		setAttr("model", model);
+		render("inside/www/news_view.html");
+	}
+
+	/**
+	 * 保存新闻数据
+	 */
+	public void news_save() {
+		String id = getPara("id");
+		String title = getPara("title");
+		int type = getParaToInt("type", 0);
+		String summary = getPara("summary");
+		String content = getPara("content");
+		String headImg = getPara("headImg");
+		int level = getParaToInt("level", 0);
+		int isComment = getParaToInt("isComment", 0);
+		String navTabId = getPara("navTabId", "");
+		String author = CookieUtils.getNameFromCookie(getCookie(Constans.cookieName));
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(title)) {
+			result.setStatusCode("1");
+			result.setMessage("文章标题为不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(summary)) {
+			result.setStatusCode("1");
+			result.setMessage("文章摘要为不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(content)) {
+			result.setStatusCode("1");
+			result.setMessage("文章内容为不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(headImg)) {
+			result.setStatusCode("1");
+			result.setMessage("请上传文章缩略图！");
+			renderJson(result);
+			return;
+		}else if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("数据有误！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ArticleModel.saveNews(id,title, type, summary, content, author, level, isComment, headImg);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+
+	}
+
+	/**
+	 * 更新新闻数据
+	 */
+	public void news_update() {
+		String id = getPara("id");
+		String title = getPara("title");
+		int type = getParaToInt("type", 0);
+		String summary = getPara("summary");
+		String content = getPara("content");
+		String headImg = getPara("headImg");
+		int level = getParaToInt("level", 0);
+		int isComment = getParaToInt("isComment", 0);
+		String navTabId = getPara("navTabId", "");
+		String author = CookieUtils.getNameFromCookie(getCookie(Constans.cookieName));
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(title)) {
+			result.setStatusCode("1");
+			result.setMessage("文章标题为不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(summary)) {
+			result.setStatusCode("1");
+			result.setMessage("文章摘要为不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(content)) {
+			result.setStatusCode("1");
+			result.setMessage("文章内容为不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(headImg)) {
+			result.setStatusCode("1");
+			result.setMessage("请上传文章缩略图！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ArticleModel.updateNews(id, title, type, summary, content, author, level, isComment, headImg);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+
+	}
+
+	/**
+	 * 更新新闻状态 xiao 2015年12月24日 20:16:30
+	 */
+	public void news_update_state() {
+		String id = getPara("id");
+		int state = getParaToInt("state", 0);
+		String navTabId = getPara("navTabId", "");
+		String author = CookieUtils.getNameFromCookie(getCookie(Constans.cookieName));
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作异常！");
+			renderJson(result);
+			return;
+		}
+		if (StringUtil.isBlankOrEmpty(author)) {
+			result.setStatusCode("1");
+			result.setMessage("操作异常！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ArticleModel.updateState(state, id, author);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 新闻评论控制 xiao 2015年12月24日 20:16:30
+	 */
+	public void controlNewsComments() {
+		String id = getPara("id");
+		int hop = getParaToInt("hop", -1);
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+		result.setStatusCode("1");
+		result.setMessage("操作异常！");
+		renderJson(result);
+		if (StringUtil.isBlankOrEmpty(id)) {
+			return;
+		}
+		boolean op = true;
+		if (hop == 1) {// 关闭
+			op = ArticleModel.controlNewsComments(0, id);
+		} else if (hop == 2) {// 打开
+			op = ArticleModel.controlNewsComments(1, id);
+		} else {
+			return;
+		}
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 添加文章类型页面
+	 */
+	public void articleTypeAdd() {
+		String navTabId = getPara("navTabId", "");
+		setAttr("navTabId", navTabId);
+		render("inside/www/article_type_add.html");
+	}
+
+	/**
+	 * 修改文章类型页面
+	 */
+	public void articleTypeEditor() {
+		String navTabId = getPara("navTabId", "");
+		int id=getParaToInt("id",-1);
+		ArticleTypeModel model=ArticleTypeModel.getById(id);
+		setAttr("model", model);
+		setAttr("navTabId", navTabId);
+		render("inside/www/article_type_editor.html");
+	}
+
+	/**
+	 * 保存文章类型数据
+	 */
+	public void articleType_save() {
+		String name = getPara("name");
+		String dec = getPara("dec");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(dec)) {
+			result.setStatusCode("1");
+			result.setMessage("文章类型名称不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("文章类型简称不能为空！");
+			renderJson(result);
+			return;
+		} else if (name.length() > 4) {
+			result.setStatusCode("1");
+			result.setMessage("文章型简称不能为大于4个汉字！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ArticleTypeModel.saveModel(name, dec);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 保存文章类型数据
+	 */
+	public void articleType_update() {
+		String name = getPara("name");
+		String dec = getPara("dec");
+		int id = getParaToInt("id",-1);
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(dec)) {
+			result.setStatusCode("1");
+			result.setMessage("文章类型名称不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("文章类型简称不能为空！");
+			renderJson(result);
+			return;
+		} else if (name.length() > 4) {
+			result.setStatusCode("1");
+			result.setMessage("文章型简称不能为大于4个汉字！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ArticleTypeModel.updateModel(id, name, dec);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 文章列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void articles() {
+
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		int type = getParaToInt("type", 0);
+		String searchKey = getPara("searchKey", "");
+
+		List<MenuModel> typelist = MenuModel.getSelectMenuList();
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>文章类型</td><td>");
+		sb.append("<select class='combox' name='type'>");
+		sb.append("<option value='0'>====请选择===</option>");
+		for (MenuModel l : typelist) {
+			if (l.getId() == type) {
+				sb.append("<option value='" + l.getId() + "' selected='selected'>" + l.getname()+ "</option>");
+			} else {
+				sb.append("<option value='" + l.getId() + "'>" + l.getname() + "</option>");
+			}
+		}
+		sb.append("</select>");
+		sb.append("</td>");
+		sb.append("<td>文章标题</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<ArticleModel> page = ArticleModel.getList(pageNumber, pageSize, searchKey, type);
+
+		setAttr("page", page);
+		setAttr("navTabId", "articles");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/news.html");
+	}
+
+	/**
+	 * 文章类型列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void articleTypes() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>类型名称</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<ArticleTypeModel> page = ArticleTypeModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "articleTypes");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/article_types.html");
+	}
+
+	/**
+	 * 文章评论列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void comments() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+		String title = getPara("title", "");
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>文章标题</td><td>");
+		sb.append("<input type='text' name='title' value='" + title + "'/>");
+		sb.append("</td>");
+		sb.append("<td>评论内容</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<CommentsModel> page = CommentsModel.getList(pageNumber, pageSize, searchKey, title);
+
+		setAttr("page", page);
+		setAttr("navTabId", "comments");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/comments.html");
+	}
+
+	/**
+	 * 后台删除评论 2015年12月25日 14:24:56 xiao
+	 */
+	public void delComments() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+			return;
+		}
+		boolean op = CommentsModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 首页菜单信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void menus() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+		//创建搜索条件
+		StringBuffer searchContent = new StringBuffer();
+		WebUtil.createSearchContent(searchContent,"菜单名称",searchKey);
+		
+		Page<MenuModel> page = MenuModel.getList(pageNumber, pageSize, searchKey);
+		setAttr("page", page);
+		setAttr("navTabId", getRequest().getRequestURI());
+		setAttr("searchContent", searchContent.toString());
+		render("inside/www/menus.html");
+	}
+
+	/**
+	 * 添加菜单信息页面
+	 */
+	public void menuAdd() {
+		StringBuffer select = new StringBuffer();
+		List<MenuModel> menulist=MenuModel.getSelectMenuList();
+		WebUtil.createSelectMenu(select,"treeId", menulist,null);
+		StringBuffer pageh=new StringBuffer();
+		WebUtil.createPageSelect(pageh,null);
+		setAttr("pageh", pageh);
+		setAttr("select", select);
+		render("inside/www/menu_add.html");
+	}
+
+	/**
+	 * 修改菜单信息页面
+	 */
+	public void menuEditor() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		
+		StringBuffer select = new StringBuffer();
+		List<MenuModel> menulist=MenuModel.getSelectMenuList();
+		MenuModel model = MenuModel.getById(id);
+		WebUtil.createSelectMenu(select,"treeId", menulist,model);
+		
+		
+		StringBuffer pageh=new StringBuffer();
+		WebUtil.createPageSelect(pageh,model);
+		
+		StringBuffer sb = new StringBuffer();
+		
+		StringBuffer postion=new StringBuffer();
+		WebUtil.createPositionSelect(postion, model);
+		if(model==null){
+			model=new MenuModel();
+		}
+		WebUtil.createSelectIsShow(sb,"isShow",model);
+		setAttr("isShow", sb.toString());
+		setAttr("select", select.toString());
+		setAttr("postion", postion);
+		setAttr("model", model);
+		setAttr("navTabId", navTabId);
+		setAttr("select", select);
+		setAttr("pageh", pageh);
+		render("inside/www/menu_editor.html");
+	}
+
+	/**
+	 * 保存菜单信息数据
+	 */
+	public void menuSave() {
+		String name = getPara("name");
+		String enName = getPara("enName");
+		String page = getPara("page");
+		int treeId = getParaToInt("treeId",-1);
+		int position = getParaToInt("position",1);
+		int isShow = getParaToInt("isShow",1);
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(enName)) {
+			result.setStatusCode("1");
+			result.setMessage("英文名称不能为空！");
+			renderJson(result);
+			return;
+		}
+		if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("名称不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op=MenuModel.saveModel(name, enName, page, position, treeId, isShow);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 更新菜单信息数据 XIAO 2015年12月26日 13:09:27
+	 */
+	public void menuUpdate() {
+		int id = getParaToInt("id",-1);
+		String name = getPara("name");
+		String enName = getPara("enName");
+		String page = getPara("page");
+		int treeId = getParaToInt("treeId",-1);
+		int position = getParaToInt("position",1);
+		int isShow = getParaToInt("isShow",1);
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(enName)) {
+			result.setStatusCode("1");
+			result.setMessage("英文名称不能为空！");
+			renderJson(result);
+			return;
+		}
+		if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("名称不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op = MenuModel.updateModel(id,name, enName, page, position, treeId, isShow);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+
+	}
+
+	/**
+	 * 删除菜单信息 2015年12月25日 14:24:56 xiao
+	 */
+	public void menuDel() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+			return;
+		}
+		boolean op = CommentsModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 打开查找模版信息
+	 */
+	public void masterplateLookup() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>模板名称</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<MasterplateModel> page = MasterplateModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "indexMenus");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/masterpletLookup.html");
+	}
+
+	/**
+	 * 模版列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void masterplates() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>模板名称</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<MasterplateModel> page = MasterplateModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "masterplates");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/masterplates.html");
+	}
+
+	/**
+	 * 添加模版页面
+	 */
+	public void masterplateAdd() {
+		String navTabId = getPara("navTabId");
+		List<MasterplatCssModel> list = MasterplatCssModel.getList();
+		StringBuffer sb = new StringBuffer();
+		sb.append("<select name='css' class='required'>");
+		for(int i=0;i<list.size();i++){
+			sb.append("<option value='"+list.get(i).getName()+"'>"+list.get(i).getDec()+"</option>");
+		}
+		sb.append("</select>");
+		setAttr("css", sb.toString());
+		setAttr("navTabId", navTabId);
+		render("inside/www/masterplate_add.html");
+	}
+
+	/**
+	 * 修改模版页面
+	 */
+	public void masterplateEditor() {
+		String navTabId = getPara("navTabId");
+		String id = getPara("id");
+		
+		List<MasterplatCssModel> list = MasterplatCssModel.getList();
+		MasterplateModel model = new MasterplateModel();
+		
+		MasterplateModel m = MasterplateModel.getById(id);
+		if (m != null) {
+			model = m;
+		}
+		StringBuffer sb = new StringBuffer();
+		sb.append("<select name='css' class='required'>");
+		for(int i=0;i<list.size();i++){
+			if(list.get(i).equals(model.getcss())){
+				sb.append("<option selected='selected' value='"+list.get(i).getName()+"'>"+list.get(i).getDec()+"</option>");
+
+			}
+			sb.append("<option value='"+list.get(i).getName()+"'>"+list.get(i).getDec()+"</option>");
+		}
+		sb.append("</select>");
+		setAttr("css", sb.toString());
+		setAttr("navTabId", navTabId);
+		setAttr("model", model);
+		render("inside/www/masterplate_editor.html");
+	}
+
+	/**
+	 * 保存菜单信息数据
+	 */
+	public void masterplateSave() {
+		String name = getPara("tempName");
+		String css = getPara("css", "");
+		String code = getPara("content");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("模版名称不能为空");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(code)) {
+			result.setStatusCode("1");
+			result.setMessage("模版内容不能为空");
+			renderJson(result);
+			return;
+		}
+		boolean op = MasterplateModel.saveModel(name, code, css);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 更新菜单信息数据 XIAO 2015年12月26日 13:09:27
+	 */
+	public void masterplateUpdate() {
+		String id = getPara("id");
+		String name = getPara("tempName");
+		String css = getPara("css", "");
+		String code = getPara("content");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("模版名称不能为空");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(code)) {
+			result.setStatusCode("1");
+			result.setMessage("模版内容不能为空");
+			renderJson(result);
+			return;
+		}
+		boolean op = MasterplateModel.updateModel(id, name, code, css);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+
+	}
+
+	/**
+	 * 删除菜单信息 2015年12月25日 14:24:56 xiao
+	 */
+	public void masterplateDel() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+			return;
+		}
+		boolean op = MasterplateModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 访客信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void visitors() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>地区</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<VisitorModel> page = VisitorModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "visitors");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/basedata/visitors.html");
+	}
+
+	/**
+	 * 删除访客信息 2015年12月25日 14:24:56 xiao
+	 */
+	public void visitorDel() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+			return;
+		}
+		boolean op = VisitorModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * app下载信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void downloads() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>下载类型</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<DownloadModel> page = DownloadModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "downloads");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/basedata/downloads.html");
+	}
+
+	/**
+	 * 删除app下载信息 2015年12月25日 14:24:56 xiao
+	 */
+	public void downloadDel() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+			return;
+		}
+		boolean op = DownloadModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 意见反馈列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void suggests() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>标题</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<SuggestModel> page = SuggestModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "suggests");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/basedata/suggests.html");
+	}
+
+	/**
+	 * 删除意见反馈信息 2015年12月25日 14:24:56 xiao
+	 */
+	public void suggestDel() {
+		String id = getPara("id");
+		String navTabId = getPara("navTabId");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(id)) {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+			return;
+		}
+		boolean op = SuggestModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 系统配置
+	 */
+	public void sysxml() {
+		renderXml("../resources/framework/dwz_jui/dwz.frag.xml");
+	}
+
+	/**
+	 * 打开上传页面
+	 */
+	public void openUpload() {
+		String fileName = "ZhiXingBus.apk";
+		HttpServletRequest request = getRequest();
+		String basepath = request.getSession().getServletContext().getRealPath("/download");
+		basepath = basepath + File.separator;
+		File newFile = new File(basepath + fileName);
+		String tip = "未上传apk文件";
+		if (newFile.exists()) {
+			String fname = newFile.getName();
+			double size = newFile.length() / (1000 * 1000.0);
+			String lastModified = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newFile.lastModified());
+			tip = "文件名：" + fname + "    " + "文件大小：" + size + "MB   " + "最近上传时间：" + lastModified + "下载文件夹：" + newFile.getParentFile();
+		}
+		setAttr("uploadUrl", tip);
+		render("inside/www/uploadify.html");
+		;
+	}
+
+	/**
+	 * 上传apk文件
+	 */
+	public void uploadApk() {
+		FileService.uploadFileApk(this);
+	}
+
+	/**
+	 * 模版样式信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void masterplatCsses() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>名称</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<MasterplatCssModel> page = MasterplatCssModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "masterplatCsses");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/masterplat_csses.html");
+	}
+
+	/**
+	 * 添加样式页面
+	 */
+	public void masterplatCssAdd() {
+		render("inside/www/masterplat_css_add.html");
+	}
+
+	/**
+	 * 修改样式页面
+	 */
+	public void masterplatCssEditor() {
+		int id = getParaToInt("id", 0);
+		MasterplatCssModel model = MasterplatCssModel.getById(id);
+		setAttr("model", model);
+		render("inside/www/masterplat_css_editor.html");
+	}
+
+	/**
+	 * 保存样式
+	 */
+	public void masterplatCssSave() {
+		String name = getPara("name");
+		String dec = getPara("dec");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(dec)) {
+			result.setStatusCode("1");
+			result.setMessage("名称不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("代码不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op = MasterplatCssModel.saveModel(name, dec);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 样式更新
+	 */
+	public void masterplatCssUpdate() {
+		String name = getPara("name");
+		String dec = getPara("dec");
+		int id = getParaToInt("id");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(dec)) {
+			result.setStatusCode("1");
+			result.setMessage("名称不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("代码不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op = MasterplatCssModel.updateModel(id, name, dec);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 管理员信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void admins() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>管理员名称</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<AdminModel> page = AdminModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", "admins");
+		setAttr("searchContent", sb.toString());
+		render("inside/www/system/admins.html");
+	}
+
+	/**
+	 * 添加管理员页面
+	 */
+	public void adminAdd() {
+		String navTabId = getPara("navTabId", "");
+		StringBuffer sb = new StringBuffer();
+		sb.append("<select>");
+		sb.append("<option value='1'>超级管理员</option>");
+		sb.append("<option value='0'>普通管理员</option>");
+		sb.append("</select>");
+		setAttr("type", sb.toString());
+		setAttr("navTabId", navTabId);
+		render("inside/www/system/admin_add.html");
+	}
+
+	/**
+	 * 修改管理员页面
+	 */
+	public void adminEditor() {
+		int id = getParaToInt("id", 0);
+		String navTabId = getPara("navTabId", "");
+		AdminModel model = AdminModel.getById(id);
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<select>");
+		if (model.getType() == 1) {
+			sb.append("<option value='1'>超级管理员</option>");
+			sb.append("<option value='0'>普通管理员</option>");
+		} else {
+			sb.append("<option value='0'>普通管理员</option>");
+			sb.append("<option value='1'>超级管理员</option>");
+		}
+		sb.append("</select>");
+		setAttr("type", sb.toString());
+		setAttr("model", model);
+		setAttr("navTabId", navTabId);
+		render("inside/www/system/admin_editor.html");
+	}
+
+	/**
+	 * 保存管理员
+	 */
+	public void adminSave() {
+		String name = getPara("name");
+		String password = getPara("password");
+		String password1 = getPara("password1");
+		int type = getParaToInt("type", 0);
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(password)) {
+			result.setStatusCode("1");
+			result.setMessage("密码不能为空！");
+			renderJson(result);
+			return;
+		} else if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("登录名不能为空！");
+			renderJson(result);
+			return;
+		}
+		if(!password.equals(password1)){
+			result.setStatusCode("1");
+			result.setMessage("两次输入的密码不一致！");
+			renderJson(result);
+			return;
+		}
+		if (AdminModel.findByName(name) != null) {
+			result.setStatusCode("1");
+			result.setMessage("管理员" + name + "已经存在！");
+			renderJson(result);
+			return;
+		}
+		String md5Password = StringUtil.isBlankOrEmpty(password) ? null : MD5Util.string2MD5(password);
+		boolean op = AdminModel.saveModel(name, md5Password, type);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 管理员更新
+	 */
+	public void adminUpdate() {
+		String password = getPara("password");
+		String password1 = getPara("password1");
+		String oldpassword = getPara("oldpassword");
+		int type = getParaToInt("type", 0);
+		int id = getParaToInt("id");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(password)) {
+			result.setStatusCode("1");
+			result.setMessage("密码不能为空！");
+			renderJson(result);
+			return;
+		} 
+		if(!password.equals(password1)){
+			result.setStatusCode("1");
+			result.setMessage("两次输入的密码不一致！");
+			renderJson(result);
+			return;
+		}
+		//密码旧验证
+		String md5oldpassword = StringUtil.isBlankOrEmpty(oldpassword) ? null : MD5Util.string2MD5(oldpassword);
+		AdminModel m=AdminModel.getById(id);
+		if(!m.getPassword().equals(md5oldpassword)){
+			result.setStatusCode("1");
+			result.setMessage("原密码验证错误！");
+			renderJson(result);
+			return;
+		}
+		
+		String md5Password = StringUtil.isBlankOrEmpty(password) ? null : MD5Util.string2MD5(password);
+
+		boolean op = AdminModel.updateModel(id, md5Password, type);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+	/**
+	 * 删除系统管理员
+	 */
+	public void adminDel(){
+		int id = getParaToInt("id");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+		boolean op = AdminModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+	/**
+	 * 合作伙伴信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void cooperations() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>公司名称</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+
+		Page<CooperationModel> page = CooperationModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", getRequest().getRequestURI());
+		setAttr("searchContent", sb.toString());
+		render("inside/www/business/cooperations.html");
+	}
+
+	/**
+	 * 添加合作伙伴员页面
+	 */
+	public void cooperationAdd() {
+		String navTabId = getPara("navTabId", "");
+		setAttr("navTabId", navTabId);
+		render("inside/www/business/cooperation_add.html");
+	}
+
+	/**
+	 * 修改合作伙伴页面
+	 */
+	public void cooperationEditor() {
+		String id = getPara("id", "");
+		String navTabId = getPara("navTabId", "");
+		CooperationModel model = CooperationModel.getById(id);
+		if(model==null){
+			model=new CooperationModel();//未来页面不报错
+		}
+		setAttr("model", model);
+		setAttr("navTabId", navTabId);
+		render("inside/www/business/cooperation_editor.html");
+	}
+
+	/**
+	 * 保存合作伙伴
+	 */
+	public void cooperationSave() {
+		String name = getPara("name");
+		String website = getPara("website");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("公司名称不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op = CooperationModel.saveModel(name,website);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 合作伙伴更新
+	 */
+	public void cooperationUpdate() {
+		String name = getPara("name");
+		String website = getPara("website");
+		String id = getPara("id");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(name)) {
+			result.setStatusCode("1");
+			result.setMessage("公司名称不能为空！");
+			renderJson(result);
+			return;
+		}
+
+		boolean op = CooperationModel.updateModel(id, name, website);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+	/**
+	 * 删除合作伙伴
+	 */
+	public void cooperationDel(){
+		String id = getPara("id");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+		boolean op = CooperationModel.delModel(id);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+	/**
+	 * 配置信息列表 xiao 2015年12月24日 10:29:40
+	 */
+	public void configs() {
+		int pageNumber = getParaToInt("pageNumber", 1);
+		int pageSize = getParaToInt("pageSize", 20);
+		String searchKey = getPara("searchKey", "");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<td>选择查询条件：</td>");
+		sb.append("<td>名称</td><td>");
+		List<ConfigModel> confins=ConfigModel.getNotRepeat();
+		WebUtil.createSelectKey(sb,confins,"searchKey");
+		sb.append("</td>");
+		
+		Page<ConfigModel> page = ConfigModel.getList(pageNumber, pageSize, searchKey);
+
+		setAttr("page", page);
+		setAttr("navTabId", getRequest().getRequestURI());
+		setAttr("searchContent", sb.toString());
+		render("inside/www/system/configs.html");
+	}
+
+	/**
+	 * 添加配置页面
+	 */
+	public void configAdd() {
+		String navTabId = getPara("navTabId", "");
+		StringBuffer sb = new StringBuffer();
+		List<ConfigModel> confins=ConfigModel.getNotRepeat();
+		WebUtil.createSelectKey(sb,confins,"searchKey");
+		setAttr("name", sb.toString());
+		setAttr("navTabId", navTabId);
+		render("inside/www/system/config_add.html");
+	}
+
+	/**
+	 * 修改配置页面
+	 */
+	public void configEditor() {
+		String id = getPara("id", "");
+		String navTabId = getPara("navTabId", "");
+		ConfigModel model = ConfigModel.getById(id);
+		if(model==null){
+			model=new ConfigModel();//未来页面不报错
+		}
+		List<ConfigModel> confins=ConfigModel.getNotRepeat();
+		StringBuffer sb = new StringBuffer();
+		WebUtil.createSelectKey(sb,confins,"key",model);
+		setAttr("name", sb.toString());
+		setAttr("model", model);
+		setAttr("navTabId", navTabId);
+		render("inside/www/system/config_editor.html");
+	}
+
+	/**
+	 * 保存配置伙伴
+	 */
+	public void configSave() {
+		String value = getPara("value");
+		String key = getPara("key");
+		String remark=getPara("remark");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(value)) {
+			result.setStatusCode("1");
+			result.setMessage("值不能为空！");
+			renderJson(result);
+			return;
+		}
+		
+		ConfigModel cm=ConfigModel.getByKey(key);
+		if(cm==null){
+			result.setStatusCode("1");
+			result.setMessage("名称不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ConfigModel.saveModel(key, value, cm.getName(), remark);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+
+	/**
+	 * 配置更新
+	 */
+	public void configUpdate() {
+		String value = getPara("value");
+		String id = getPara("id");
+		String remark=getPara("remark");
+		String navTabId = getPara("navTabId", "");
+		DwzResult result = new DwzResult();
+
+		if (StringUtil.isBlankOrEmpty(value)) {
+			result.setStatusCode("1");
+			result.setMessage("值不能为空！");
+			renderJson(result);
+			return;
+		}
+		boolean op = ConfigModel.updateModel(id,value,remark);
+		if (op) {
+			result.setStatusCode("0");
+			result.setMessage("操作成功!");
+			result.setCallbackType("closeCurrent");
+			result.setNavTabId(navTabId);
+			renderJson(result);
+		} else {
+			result.setStatusCode("1");
+			result.setMessage("操作失败！");
+			renderJson(result);
+		}
+	}
+}

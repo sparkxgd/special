@@ -1,0 +1,566 @@
+* {
+	margin: 0;
+	padding: 0;
+	font: 13px Verdana, Arial
+}
+
+body {
+	height: 650px;
+}
+
+.head {
+	height: 7%;
+	width: 100%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+.head a{
+	text-decoration: none;
+}
+.head a span:FIRST-CHILD{
+	font-size: 18px;
+	color: black;
+}
+.head div{
+	background-image:url("../images/changecity.png");
+	background-size:100% 100%;
+	background-repeat: no-repeat;
+	height: 15px;
+	width: 15px;
+	display: inline-table;
+	margin-left: 1%;
+	margin-right: 1%;
+}
+
+.main_left_head {
+	height: 7%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+}
+.main {
+	height: 100%;
+	border: 1px solid green;
+	border-radius: 10px;
+	margin-left: 1%;
+	margin-right: 1%;
+	background-color: #F7FAFF;
+}
+
+.main_left {
+	width: 65%;
+	height: 100%;
+	float: left;
+	padding-left: 2%;
+}
+
+.main_right {
+	float: right;
+	width: 32%;
+	border-left: 1px dotted red;
+	height: 100%;
+}
+
+.content_title {
+	list-style: none;
+	margin: 1% 0 1% 1%;
+}
+
+.content_title li {
+	margin-top: 1%;
+}
+
+.content_title li >div{
+	display: inline-block;
+	margin-left: 2%;
+}
+.content_title li{
+	margin-left: 3%;
+}
+
+ul#filter {
+	float: left;
+	font-size: 16px;
+	margin-left: 0;
+	width: 96%;
+	list-style: none;
+}
+
+ul#filter li {
+	float: left;
+	line-height: 10px;
+	margin-right: 10px;
+	padding-right: 10px;
+}
+
+ul#filter li a {
+	text-decoration: none;
+	padding-bottom: 5px;
+}
+ul#filter li a:HOVER{
+	background-color: #C6C6C6;
+}
+.current a{
+	border-bottom: 2px solid green;
+	color: #3098e8;
+}
+.hidden {
+	display: none;
+}
+
+.acc-section {
+	overflow: hidden;
+	margin: 0 auto;
+	height: 100%;
+	width: 101.8%;
+	background-color: #DEECF9;
+}
+
+.acc-content {
+	height: 220px;
+	padding: 1% 1% 1% 0;
+	border-top: none;
+	margin: 1% 5% 1% 5%;
+	background-color: white;
+
+
+}
+.station_info{
+	min-height: 180px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin: 0 auto;
+    z-index: -1;
+}
+.road_info_title {
+	margin: 0 0 25px 0;
+	color: red;
+}
+
+.road_info_title span:FIRST-CHILD {
+	padding-right: 10%;
+	padding-left: 1%;
+	text-align: center;
+}
+
+.road_info_title input {
+	float: right;
+	margin: 0 auto;
+	background-color: #fe823e;
+	color: white;
+}
+
+.query_bt {
+	margin: 0 auto;
+	background-color: #3098e8;
+	color: white;
+}
+.orange_bt {
+	margin: 0 auto;
+	background-color: #FE813E;
+	color: white;
+}
+#changposition{
+	margin: 0 auto;
+	background-image:url("../images/changepostion.png");
+	background-size:100% 100%;
+	background-repeat: no-repeat;
+	width: 5%;
+}
+.bus_position_line {
+	height: 12%;
+	width: 100%;
+	top: -2.5%;
+	background-color: #5B5B5B;
+	position: absolute;
+	z-index: 1;
+}
+
+.bus_position_line_start {
+	width: 130%;
+	left: -30%;
+}
+
+.bus_position_line_zhong {
+	left: 0%;
+}
+
+.bus_position_line_end {
+	left: 0%;
+}
+
+#nested {
+	width: 96%;
+	list-style: none;
+	margin-bottom: 15px;
+}
+
+#nested h3 {
+	width: 100%;
+	padding: 6px 6px 8px;
+	font-weight: bold;
+	margin-top: 5px;
+	cursor: pointer;
+	background-color: #CFE8FC;
+}
+
+#nested h3:hover {
+	background-color: green;
+}
+
+#nested .acc-selected {
+	background-color: #B0D9F9;
+}
+
+.details_lable {
+	float: right;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-image: url("../images/details_lable_down.png");
+	width: 40px;
+	height: 15px;
+	z-index: 1;
+}
+.schemename{
+	width: 250px;
+	float: left;
+	text-align: left;
+}
+.acc li h3 span {
+	margin: 0 5px 0 5px;
+}
+
+.acc li h3 span:last-child {
+	margin: 0 0 0 5px;
+}
+
+.acc-content ul {
+	height: 155px;
+	list-style: none;
+	position: relative;
+	margin: 10px 10px 0px 10px;
+	overflow: visible;
+	 white-space: nowrap;
+	 text-align: center;
+}
+
+.acc-content ul li {
+	display: inline-block;
+	margin: 10px 0 10px 0;
+	vertical-align: top;
+    width: 25px;
+	height: 93%;
+	font-size: 10px;
+	position: relative;
+	 white-space: nowrap;
+	 text-align: left;
+}
+
+.acc-content ul li a {
+	width: 40%;
+	height: 90%;
+	font-size: 12px;
+	top: 20px;
+	text-decoration: none;
+	position: absolute;
+	white-space: normal;
+	word-break: break-all;
+    word-wrap: break-word;
+    line-height: 14px;
+}
+.acc-content ul li a:HOVER{
+	font-size: 17px;
+	line-height: 17px;
+}
+
+.li_icon {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 100%;
+	height: 8%;
+	position: absolute;
+	z-index: 100;
+}
+
+.li_icon_start {
+	background-image: url("../images/line_start.png");
+}
+
+.li_icon_zhong {
+	background-image: url("../images/line_zhong.png");
+}
+
+.li_icon_end {
+	background-image: url("../images/line_end.png");
+}
+.bus_coming_box {
+	width: 50%;
+	height: 8%;
+	top: -18px;
+	position: absolute;
+}
+.bus_coming {
+	background-image: url("../images/map/forward_bus_icon.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.arrow_icon {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 70%;
+	height: 12%;
+	bottom: 1px;
+	left: -10%;
+	position: absolute;
+}
+
+.up_bus_arrow {
+	background-image: url("../images/up_bus_arrow.png");
+}
+
+.down_bus_arrow {
+	background-image: url("../images/down_bus_arrow.png");
+}
+.up_sation_a{
+	color: green;
+	font-size: 14px;
+}
+.down_sation_a{
+	color: red;
+	font-size: 14px;
+}
+.scheme_buxing{
+	padding-right: 5%;
+	width: 50px;
+}
+.scheme_price{
+	padding-right: 5%;
+}
+.mod_lable{
+	color: #576c7d;
+	font-size: 12px;
+}
+.mod_road{
+	color: #3098e8;
+	font-size: 13px;
+	display: inline-block;
+	cursor:pointer;
+}
+.mod_road_icon{
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	width: 10px;
+	height: 12px;
+	float: right;
+	margin-top:5px;
+	margin-left:3px;
+}
+.mod_road_icon_down{
+	background-image: url("../images/down.png");
+}
+.mod_road_icon_up{
+	background-image: url("../images/up.png");
+}
+.query_scheme_info{
+	height: 400px;
+	overflow-y: scroll;
+}
+
+.main_right_head_businfo{
+	height: 14%;
+	width: 100%;
+	background-color: #4fa7fe;
+	border-top-right-radius:10px;
+	
+}
+#map{
+	height: 86%;
+	width: 100%;
+	border-bottom-right-radius:10px;
+}
+.businfo{
+	margin-left: 5px;
+}
+.businfo_0{
+	color: white;
+	padding-top: 5px;
+}
+.businfo_1{
+	color: white;
+	font-size:12px;
+}
+.businfo_2{
+	color:#FFFF00;
+}
+.roadquery_infos{
+	height: 400px;
+	text-align: center;
+
+}
+.road_info_txt{
+	height:45%;
+	border: 1px solid gray;
+	background-color: white;
+}
+.road_info_zhong{
+	height:4%;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+.road_info_pic{
+	height:50%;
+	border: 1px solid gray;
+	background-color: white;
+	
+}
+.road_info_txt_pic{
+	float:left;
+	width: 45%;
+	height:80%;
+	margin:2% 0 2% 2%;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-image: url("../images/bus_18.jpg");
+}
+.road_info_txt_t{
+	float:right;
+	width: 45%;
+	text-align: left;
+	margin:2% 0 2% 0;
+}
+.road_info_txt_t_title{
+	font-size:18px;
+}
+.road_info_txt_t_to{
+	height:10px;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	position: relative;
+}
+.txt{
+	width: 100%;
+}
+.to_icon111{
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-image: url("../images/changedirection.png");
+	width: 5%;
+	height: 100%;
+	display:inline
+	
+}
+
+.from{
+	position:absolute;
+	height:100%;
+}
+.to_icon{
+	position:absolute;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-image: url("../images/changedirection.png");
+	height:50%;
+	width: 5%;
+	margin-left: 45%
+	
+	
+}
+.to{
+	position:absolute;
+	margin-left:55%; height:100%;
+}
+
+.businfo_ul {
+	height: 155px;
+	list-style: none;
+	position: relative;
+	margin: 10px 10px 0px 10px;
+	overflow: visible;
+	 white-space: nowrap;
+}
+
+.businfo_ul li {
+	display: inline-block;
+	margin: 10px 0 10px 0;
+	vertical-align: top;
+    width: 25px;
+	height: 93%;
+	font-size: 10px;
+	position: relative;
+	white-space: nowrap;
+	text-align: left;
+}
+
+.businfo_ul li a {
+	width: 40%;
+	height: 90%;
+	font-size: 12px;
+	top: 20px;
+	text-decoration: none;
+	position: absolute;
+	white-space: normal;
+	word-break: break-all;
+    word-wrap: break-word;
+    line-height: 14px;
+}
+.businfo_ul li a:HOVER{
+	font-size: 17px;
+	line-height: 17px;
+}
+.road_info_bt_div{
+	float: right;
+	width: 15%;
+}
+#road_info_rt{
+	color: red;
+}
+
+.initpage{
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-image: url("../images/initpage.png");
+	width: 100%;
+	height: 400px;
+	position: relative;
+}
+.initpage span{
+	font-size: 25px;
+	margin-top:20%;
+	margin-left: 30%;
+	position: absolute;
+}
+.initpage span>a{
+	font-size: 25px;
+	color: red;
+	text-decoration: none;
+}
+.main_right_init_pic{
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-image: url("../images/main_right_init_pic.jpg");
+	float: right;
+	width: 32%;
+	border-left: 1px dotted red;
+	height: 100%;
+	border-bottom-right-radius:10px;
+	border-top-right-radius:10px;
+	position: relative;
+}
+.download{
+	text-decoration: none;
+	margin-left: 15%;
+	position: absolute;
+	content: "";
+	width: 38%;
+	height:5%;
+}
+.android_download{
+	margin-top:40%;
+}
+.download_ios{
+	margin-top:54%;
+}
+.clean{
+	clear: both;
+}

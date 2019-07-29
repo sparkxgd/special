@@ -1,0 +1,20 @@
+#Fri Oct 07 11:44:22 CST 2016
+eclipse.preferences.version=1
+encoding//WebRoot/WEB-INF/html/inside=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/basedata/downloads.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/basedata/suggests.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/basedata/visitors.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/business/cooperation_add.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/business/cooperation_editor.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/business/cooperations.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/system/admin_add.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/system/admin_editor.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/system/admins.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/system/config_add.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/system/config_editor.html=UTF-8
+encoding//WebRoot/WEB-INF/html/inside/www/system/configs.html=UTF-8
+encoding//WebRoot/resources/framework=UTF-8
+encoding//WebRoot/resources/framework/dwz_jui/users.html=UTF-8
+encoding//WebRoot/resources/framework/dwz_jui/w_removeSelected.html=UTF-8
+encoding//src/com/zhixingbus/server/config/ServerConfig.java=UTF-8
+encoding/<project>=UTF-8

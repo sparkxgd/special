@@ -1,0 +1,87 @@
+package com.zhixingbus.server.controller;
+
+import com.zhixingbus.server.service.PoseidonService;
+
+public class PoseidonController extends BaseController {
+	//线路纠错列表
+	public void query_error_list() {
+		PoseidonService.getErrorList(this);
+	}
+	
+	//线路纠错操作
+	public void error_op() {
+		PoseidonService.errorOperator(this);
+	}
+	
+	public void user_detail(){
+		PoseidonService.queryUserDetail(this);
+	}
+	
+	public void query_suggestion(){
+		PoseidonService.querySuggestion(this);
+	}
+	
+	//意见反馈展示页面
+	public void user_reply(){
+		PoseidonService.queryReply(this);
+	}
+	
+	public void reply_suggest(){
+		PoseidonService.replySuggest(this);
+	}
+	
+	//客服注册
+	public void custs_register(){
+		PoseidonService.custsRegister(this);
+	}
+	public void openCustsRegister(){
+		PoseidonService.custsRegister(this);
+	}
+	
+	public void query_custs_detail(){
+		PoseidonService.queryCustsDetail(this);
+	}
+	
+	public void search_city(){
+		PoseidonService.searchCity(this);
+	}
+	
+	/**
+	 *  为客服添加城市
+	 */
+	public void add_custs_city(){
+		PoseidonService.addCustsCity(this);
+	}
+	
+	/**
+	 *  通知详情
+	 */
+	public void system_prompt(){
+		PoseidonService.systemPrompt(this);
+	}
+	
+	public void system_edit(){
+		PoseidonService.systemEdit(this,-1);
+	}
+	
+	public void system_save(){
+		PoseidonService.systemSave(this);
+	}
+	
+	public void system_delete(){
+		PoseidonService.systemDelete(this);
+	}
+	
+	public void send_sys_msg(){
+		PoseidonService.sendSysMsg(this);
+	}
+	
+	
+	public void query_bankroll_detail(){
+		PoseidonService.query_bankroll_detail(this);
+	}
+	
+	public void query_weixinpay_log(){
+		PoseidonService.queryWeixinpayLog(this);
+	}
+}

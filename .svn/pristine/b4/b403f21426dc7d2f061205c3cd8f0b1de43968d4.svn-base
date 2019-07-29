@@ -1,0 +1,36 @@
+<div class="pageContent">
+	<form method="post" action="/admin/articleType_update"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this,dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+					<label>类型id:</label>
+					<input name="id" readonly="readonly" class="textInput readonly" type="text" size="30" value="${(model.id)}"/>
+					<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+				</p>
+				<p>
+					<label>类型名称:</label>
+					<input name="dec" class="required" value="${(model.dec)!}" type="text" size="30"/>
+				</p>
+				<p>
+					<label>类型简称:</label>
+					<input name="name" class="required" value="${(model.name)!}" type="text" size="30"/>
+				</p>
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,42 @@
+<div class="pageContent">
+	<form method="post" action="/admin/configUpdate"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this,dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+				<label>id:</label>
+				<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+				<input name="id" readonly="readonly" class="textInput readonly" type="text" size="30" value="${(model.id)!}"/>
+				</p>
+				<p>
+					<label>名称:</label>
+					${(name)!}
+					
+				</p>
+				<p>
+					<label>value:</label>
+					<input name="value" class="required" type="text" size="30" value="${(model.value)!}"/>
+				</p>
+				<p>
+					<label>备注:</label>
+					<input name="remark" class="required" type="text" size="30" value="${(model.remark)}"/>
+				</p>
+				
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存更新</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

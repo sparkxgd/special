@@ -1,0 +1,71 @@
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/comments" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				${(searchContent)!}
+			</tr>
+		</table>
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></li>
+			</ul>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="delete" href="/admin/delComments?id={sid}&navTabId=${(navTabId)!}"
+				target="ajaxTodo" warn="请选择一条信息" mask="true" title="你确定要删除选中的这条信息吗？"><span>删除</span></a></li>
+		</ul>
+	</div>
+	<table class="list" layoutH="116">
+		<thead>
+			<tr>
+				<th width="200">文章标题</th>
+				<th width="120">ip</th>
+				<th width="120">智友</th>
+				<th width="250">评论内容</th>
+				<th width="120">评论时间</th>
+				<th width="120">赞同数</th>
+				<th width="120">不赞同</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target='sid' rel="${(d.id)!}">
+				<td>${(d.title)!}</td>
+				<td>${(d.ip)!}</td>
+				<td>${(d.cityName)!}</td>
+				<td>${(d.content)!}</td>
+				<td>${(d.createTime)!}</td>
+				<td>${(d.agreeNum)!}</td>
+				<td>${(d.disapprovalNum)!}</td>
+				<td>
+					<a class="btnDel" href="../admin/delComments?id=${(d.id)!}" target="ajaxTodo" title="确定要下删除《${(d.content)!}》这条评论吗？" warn="请选择一条评论" mask="true">删除</a>
+				</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

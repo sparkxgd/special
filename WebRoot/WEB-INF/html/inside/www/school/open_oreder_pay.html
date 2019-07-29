@@ -1,0 +1,105 @@
+<div class="pageContent">
+	<form method="post" action="/admin/studentPay?navTabId=${(navTabId)!}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+		<#list list as d>
+		<fieldset>
+		<legend>学生：${(d.studentName)!}-----交费单</legend>
+			<p>
+				<label>年 级：</label>
+				<input  type="text" size="30" value="${(d.gradeName)!}" readonly="readonly"/>
+			</p>
+			<p>
+				<label>报读科目：</label>
+				<input  type="text" size="30" value="${(d.subjectName)!}" readonly="readonly"/>
+			</p>
+			<p>
+				<label>报读班级类型：</label>
+				<input  type="text" size="30" value="${(d.classTypeName)!}" readonly="readonly"/>
+			</p>
+			<p>
+				<label>报读课时：</label>
+				<input  type="text" size="30" value="${(d.regNumber)!}" readonly="readonly"/>
+			</p>
+			<p>
+				<label>已缴费用：</label>
+				<input  type="text" size="30" value="${(d.actualCost)!}" readonly="readonly"/>
+			<span class="unit">元</span>
+			</p>
+			<p>
+				<label>未交费用：</label>
+				<input  type="text" size="30" value="${(d.mustCost-d.actualCost)!}" readonly="readonly"/>
+				<span class="unit">元</span>
+			</p>
+			<div class="divider"></div>
+			<p>
+				<label>本次支付：</label>
+				<input name="items[].regorderId" value="${(d.id)!}" type="hidden" />
+				<input type="text" size="30" name="items[].detailtol" value="0" class="number required detailtol" min="1" max="${(d.mustCost-d.actualCost)!}"/>
+				<span class="unit">元</span>
+			</p>
+			</fieldset>
+			</#list>
+			<div class="divider"></div>
+			<fieldset>
+			<legend>总计：*以上的交费单支付金的总额</legend>
+			<p>
+				<label>总支付：</label>
+				<input id="total" type="text" size="30" name="total"  value="" readonly="readonly"/>
+				<span class="unit">元</span>
+			</p>
+			<p>
+				<label>支付方式：</label>
+				<select name="paymodel" class="required combox">
+					<option value="1" selected>现金</option>
+					<option value="2">刷卡</option>
+					<option value="3">微信</option>
+					<option value="4">支付宝</option>
+				</select>
+			</p>
+			<p>
+				<label>经手人：</label>
+				<input name="emp.id" value="" type="hidden" />
+				<input class="required" name="emp.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookEmployee" lookupGroup="emp"/>
+			</p>
+				<p>
+				<label>交费时间 ：</label>
+				<input  type="text" class="date required" name="paytime"  readonly="true" dateFmt="yyyy-MM-dd HH:mm:ss"/>
+				<a class="inputDateButton" href="javascript:;">选择</a>
+			</p>
+			<p>
+				<label>交费人：</label>
+				<input name="payer" size="30" class="required"/>
+			</p>
+				<p>
+				<label>交费人电话 ：</label>
+				<input name="payerTel" size="30" class="phone"/>
+			</p>
+			<p>
+				<label>备注：</label>
+				<input name="remark" size="30" alt="请输入收据单号"/>
+			</p>
+			</fieldset>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交支付</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+<script type="text/JavaScript">
+$(document).ready(function(){
+  $(".detailtol").blur(function(){
+  var total=0;
+	$(".detailtol").each(function(key,value){
+		var tol = $(this).val();
+		total=+tol;
+	});
+    $("#total").val(total);
+  });
+});
+</script>

@@ -1,0 +1,62 @@
+<div class="pageContent" style="height:overflow: auto;">
+	<form method="post" action="/admin/menuSave"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+					<label>菜单名称:</label>
+					<input name="name" class="required" type="text" size="30" />
+					<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+				</p>
+				<p>
+					<label>英文名称:</label>
+					<input name="enName" type="text" size="30" class="required"/>
+				</p>
+				<p>
+					<label>跳转页面:</label>
+					${(pageh)!}
+				</p>
+				<p>
+					<label>父菜单:</label>
+					${(select)!}
+				</p>
+				<p>
+					<label>显示位置:</label>
+					<select name="position">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+					</select>
+				</p>
+				<p>
+					<label>是否显示:</label>
+					<select name="isShow">
+						<option value="1">不显示</option>
+						<option value="0">显示</option>
+					</select>
+				</p>
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

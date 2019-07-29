@@ -1,0 +1,90 @@
+<div class="pageContent" layouth="26"
+	style="height: overflow :     auto;">
+	<form method="post" action="/admin/exitCost"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent">
+			<dl class="nowrap">
+				<dt>
+					产品总价:
+				</dt>
+				<dd>
+					<input name="navTabId" type="hidden" value="${(navTabId)!}" />
+					<input name="id" type="hidden" value="${(m.id)!}" />
+					${(m.total)!}元
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					应缴费用:
+				</dt>
+				<dd>
+					${(m.mustCost)!}元
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					实缴金额:
+				</dt>
+				<dd>
+					${(m.actualCost)!}元
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					优惠金额:
+				</dt>
+				<dd>
+					${(m.discountCost)!}元
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					报读课时:
+				</dt>
+				<dd>
+				${(m.regNumber)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					可退金额:
+				</dt>
+				<dd>
+				<input name="exitCost" type="text" value="${final_vaild_cost}" class="required number" min="1" max="${(final_vaild_cost)!}"/>
+				<span class="info">元(最多可退${final_vaild_cost}元)</span>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					备注:
+				</dt>
+				<dd>
+					<input name="remark" type="text" value=""/>
+				</dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li>
+					<div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">
+								保存
+							</button>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">
+								取消
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

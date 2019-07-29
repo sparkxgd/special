@@ -1,0 +1,9 @@
+#生产配置123.57.50.170
+#jdbcUrl = jdbc:mysql://123.57.50.170/huntersuninfo?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+#user = yj2015
+#password = yj0623
+
+#测试配置
+jdbcUrl = jdbc:mysql://localhost/huntersuninfo?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user = root
+password = 123456

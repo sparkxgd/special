@@ -1,0 +1,149 @@
+<form action="/admin/studentSigin_student_save?navTabId=${(navTabId)!}"
+	method="post" class="pageForm"
+	onsubmit="return validateCallback(this, navTabAjaxDone)">
+	<div class="pageContent">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>
+					班级：
+				</dt>
+				<dd>
+					<input name="classinfoId" value="${(classinfoId)!}" type="hidden" />
+					<input name="rows" value="${(rows)!}" type="hidden" />
+					<label>
+						${(className)!}
+					</label>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					上课教师：
+				</dt>
+				<dd>
+					<input name="e.id" value="" type="hidden" />
+					<input class="required" name="e.name" type="text" postField="name"
+						suggestFields="id,name" suggestUrl="/admin/lookEmployee"
+						lookupGroup="e" />
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					上课时间：
+				</dt>
+				<dd>
+					<input  type="text" class="date required" name="gotime"  readonly="true" dateFmt="yyyy-MM-dd HH:mm:ss"/><a class="inputDateButton" href="javascript:;">选择</a>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					下课时间：
+				</dt>
+				<dd>
+					<input  type="text" class="date required"" name="overTime"  readonly="true" dateFmt="yyyy-MM-dd HH:mm:ss"/><a class="inputDateButton" href="javascript:;">选择</a>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					上课教室：
+				</dt>
+				<dd>
+					<input name="c.id" value="" type="hidden" />
+					<input class="required" name="c.name" type="text" postField="name"
+						suggestFields="id,name" suggestUrl="/admin/lookClassroom"
+						lookupGroup="c" />
+				</dd>
+			</dl>
+			<table class="list" width="100%">
+				<thead>
+					<tr>
+						<th>
+							学生
+						</th>
+						<th>
+							签到
+						</th>
+						<th>
+							是否有效
+						</th>
+						<th>
+							上课类型
+						</th>
+						<th>
+							备注
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list list as d>
+					<tr class="unitBox">
+						<td>
+							${(d.studentName)!}
+							<input name="ob[${d_index}].studentId" value="${(d.studentId)!}" type="hidden"
+								class="required" />
+						</td>
+						<td>
+							<select class="combox" name="ob[${d_index}].login">
+								<option value="1">
+									是
+								</option>
+								<option value="0">
+									否
+								</option>
+							</select>
+						</td>
+						<td>
+							<select class="combox" name="ob[${d_index}].availd">
+								<option value="1">
+									有效
+								</option>
+								<option value="0">
+									无效
+								</option>
+							</select>
+						</td>
+						<td>
+							正常上课
+						</td>
+						<td>
+							<input type="text" name="ob[${d_index}].remark" value="" size="12"
+								class="required">
+						</td>
+					</tr>
+					</#list>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+					</tr>
+				</tfoot>
+			</table>
+			<div class="tabsFooter">
+				<div class="tabsFooterContent">
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="formBar">
+		<ul>
+			<li>
+				<div class="buttonActive">
+					<div class="buttonContent">
+						<button type="submit">
+							保存
+						</button>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="button">
+					<div class="buttonContent">
+						<button class="close" type="button">
+							关闭
+						</button>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</form>

@@ -1,0 +1,78 @@
+<h2 class="contentTitle">学生：${(m.name)!}-----基本信息</h2>
+
+<div class="pageContent">
+	<form method="post" action="demo/common/ajaxDone.html" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="98">
+			<p>
+				<label>学生姓名：</label>
+				<input type="text" value="${(m.name)!}" readonly="true" />
+			</p>
+			<p>
+				<label>性别：</label>
+				<input type="text" value="${(m.sexStr)!}" readonly="true" />
+			</p>
+			<p>
+				<label>出生年月：</label>
+				<input type="text" value="${(m.borthday)!}" readonly="true" />
+			</p>
+			<p>
+				<label>录入时间：</label>
+				<input type="text" value="${(m.creatTime)!}" readonly="true" />
+			</p>
+			<p>
+				<label>联系电话：</label>
+				<input type="text" value="${(m.tel)!}" readonly="true" />
+			</p>
+			<p>
+				<label>家长联系电话：</label>
+				<input type="text" value="${(m.parentTel)!}" readonly="true" />
+			</p>
+			<p>
+				<label>家庭地址：</label>
+				<input type="text" value="${(m.addr)!}" readonly="true" />
+			</p>
+			<p>
+				<label>学校：</label>
+				<input type="text" value="${(m.schoolName)!}" readonly="true" />
+			</p>
+			<p>
+				<label>年级：</label>
+				<input type="text" value="${(m.gradeName)!}" readonly="true" />
+			</p>
+			<p>
+				<label>班级：</label>
+				<input type="text" value="${(m.className)!}" readonly="true" />
+			</p>
+			<p>
+				<label>qq：</label>
+				<input type="text" value="${(m.qq)!}" readonly="true" />
+			</p>
+			<p>
+				<label>微信：</label>
+				<input type="text" value="${(m.weixin)!}" readonly="true" />
+			</p>
+			<p>
+				<label>状态：</label>
+				<input type="text" value="${(m.stateStr)!}" readonly="true" />
+			</p>
+			<p>
+				<label>更新时间：</label>
+				<input type="text" value="${(m.updateTime)!}" readonly="true" />
+			</p>
+			<p>
+				<label>备注：</label>
+				<textarea  readonly="true" cols="110" rows="5">${(m.remark)!}</textarea>
+			</p>
+		</div>
+		
+		<div class="formBar">
+			<ul>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+

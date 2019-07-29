@@ -1,0 +1,372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+<title>智行公交-产品主页</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="resources/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+var imageindex=0;
+$(function () {
+	$("#pwx").mouseover(function(){$(".weixin_img").show();}).mouseout(function(){$(".weixin_img").hide();});
+	setInterval(changeimage, 2000); 
+		
+});
+function changeimage(){
+		switch (imageindex) {
+		case 0:
+			$("#main_a_right_image_c").css("background-image","url(resources/images/index/donga.jpg)");
+			imageindex=imageindex+1;
+			break;
+		case 1:
+			$("#main_a_right_image_c").css("background-image","url(resources/images/index/dong2.jpg)");
+			imageindex=imageindex+1;
+			break;
+		case 2:
+			$("#main_a_right_image_c").css("background-image","url(resources/images/index/dong3.jpg)");
+			imageindex=0;
+			break;
+		default:
+			$("#main_a_right_image_c").css("background-image","url(resources/images/index/donga.jpg)");
+			break;
+		}
+	}
+function download(obj,type){
+	if(type=='ios'){
+		location.href="http://itunes.apple.com/us/app/id975077001";
+	}else{
+		location.href = "http://api.zhixingbus.com/upload/download_install_file";
+	}
+	}
+</script>
+<style type="text/css">
+	body,div,ul{margin: 0px;padding: 0px;}
+	body{
+		background-color: white;
+		background-image: url(resources/images/index/bg.jpg);
+		background-repeat:repeat-x;
+		background-size: 100% 590px;
+		height: 2500px;
+		
+	}
+
+	.head{
+		background-color: gray;
+		height: 74px;
+		width:100%;
+		margin:0 auto; position: relative;z-index: 0;
+		filter:alpha(opacity=90); -moz-opacity:0.9; -khtml-opacity: 0.9; opacity: 0.9;
+	}
+	.logo{
+		background-image: url(resources/images/index/logo.png);
+		background-repeat:no-repeat;
+		background-size:90% 100%;
+		float: left;
+		height: 120%;
+		width:18%;
+		margin-left: 22%;
+	}
+	.shar{
+		width:5%;
+		height:90%;
+		float: right;
+        margin-right: 22%;
+		padding-top:2%;
+		
+	}
+	#pwx{
+		background-image: url(resources/images/index/weixin.png);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:35%;
+		height:35%;
+		float: left;
+		margin-right: 1%;
+		cursor: pointer;
+		
+	}		
+	#pwb{
+		background-image: url(resources/images/index/weibo.png);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:35%;
+		height:35%;
+		float: right;
+		cursor: pointer;
+	}
+	.main{
+		width:56%;
+		height:70%;
+		margin-left:22%;
+		
+	}
+	.main_a{
+		height:470px;
+		margin-top:40px;
+	}
+	.main_a_left{
+		float:left;
+		width:38%;
+		height:80%;
+		margin-top:10%;
+		margin-left:10%;
+			
+	} 
+	.main_a_right{
+		width:50%;
+		height:100%;
+		float:right;
+	}
+	#main_a_left_up {
+		background-image: url(resources/images/index/wenan.png);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:90%;
+		height:46%;
+		padding-left:10%;
+		
+	}
+	#main_a_left_down{
+		width:100%;
+		height:50%;
+		padding-top:10%;
+	}
+	#main_a_right_image{
+		background-image: url(resources/images/index/leng.png);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:65%;
+		height:100%;
+		float:right;
+	}
+	#main_download{
+		float:left;
+		width:50%;
+		height:100%;
+		margin-left:5%;
+	}
+	#main_scan{
+		background-image: url(resources/images/index/scan.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		float:right;
+		width:40%;
+		height:60%;
+		margin-right:5%;
+	}
+	#main_download_android{
+		background-image: url(resources/images/index/Androidx.png);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		height:20%;
+		width:80%;
+		cursor: pointer;
+		
+	}
+	
+	#main_download_ios{
+		background-image: url(resources/images/index/Iphone.png);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		height:20%;
+		width:80%;
+		margin-top:24%;
+		cursor: pointer;
+	}
+	#main_a_right_image_c{
+		background-image: url(resources/images/index/donga.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:70%;
+		height:64.5%;
+		border:1px solid #181d4b;
+		margin-top:32%;
+		margin-left:14.3%;
+		-moz-border-radius: 5px;      /* Gecko browsers */
+		-webkit-border-radius: 5px;   /* Webkit browsers */
+		border-radius:5px;            /* W3C syntax */
+	}
+	.main_b{
+		height:470px;
+		width:100%;
+	}
+	.main_b_left{
+		background-image: url(resources/images/index/autopostion.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:40%;
+		height:39%;
+		margin:150px 25px 25px 25px;
+		float:left;
+	}
+	.main_b_right{
+		background-image: url(resources/images/index/1iPhone647White.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:27%;
+		height:90%;
+		margin:50px 25px 25px 80px;
+		float:left;
+		
+	}
+	.main_c{
+		height:470px;
+		width:100%;
+	
+	}
+	.main_c_left{
+		background-image: url(resources/images/index/2iPhone.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:27%;
+		height:90%;
+		float:left;
+		margin-top:2%;
+		margin-left:90px;
+	}
+	.main_c_right{
+		background-image: url(resources/images/index/frt.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:40%;
+		height:36%;
+		margin-top:20%;
+		float:right;
+		margin-right:70px;
+	}
+	.main_d{
+		height:470px;
+		width:100%;
+	
+	}
+	.main_d_left{
+		background-image: url(resources/images/index/arri.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:40%;
+		height:33%;
+		margin:150px 25px 25px 25px;
+		float:left;
+	}
+	.main_d_right{
+		background-image: url(resources/images/index/3iPhone.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:27%;
+		height:90%;
+		margin:50px 25px 25px 80px;
+		float:left;
+	}
+	.main_e{
+		height:470px;
+		width:100%;
+		padding-bottom:40px;
+	}
+	.main_e_left{
+		background-image: url(resources/images/index/4iPhone.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:27%;
+		height:90%;
+		float:left;
+		margin-top:2%;
+		margin-left:90px;
+	}
+	.main_e_right{
+		background-image: url(resources/images/index/scheme.jpg);
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		width:40%;
+		height:36%;
+		margin-top:23%;
+		float:right;
+		margin-right:70px;
+	}
+	.menu {margin-left:44%;position: relative;color: #FFFFFF;z-index: 1;}
+	.menu li {float: left;width: 9%;height: 100%;background-repeat: no-repeat;list-style-type: none;padding: 0px;margin: auto 5px;}
+	.menu li a {font: bold 13px/13px Microsoft YaHei,SimHei;height: 25px;color: #dedede;display: block;text-align: center;padding-top: 30px;text-decoration:none;}
+	.menu li a:hover {color:#66cfff;}
+
+	.footer{
+		width:100%;
+		height:60px;
+		margin-bottom:-190px;
+		text-align:center;
+		background-color: #0c212b;
+		color:white;
+		padding-top:30px;
+		position: relative;
+		clear:both;
+		filter:alpha(opacity=50); -moz-opacity:0.5; -khtml-opacity: 0.5; opacity: 0.5;
+	}
+.weixin_img {
+	background-color:#ffffff;
+  
+	display:none;
+    position: fixed;
+    right: 90px;
+    width: 150px;
+    z-index: 9999;
+}
+.weixin_img img{width:150px;height:150px;}	
+.conmom_account{ font-size: 12px; text-align: center;}
+.Clear{
+    clear:both;
+}
+</style>
+</head>
+    <body>
+		<div class="head">
+			<div class="logo"></div>
+    		<ul class="menu">
+                <li class="cur" id="class0"><a href="index.html">智行公交</a></li>
+                <li id="class1"><a href="news.html">商家接入</a></li>
+                <li id="class2"><a href="cooperation.html">微信接入</a></li>
+                <li id="class5"><a href="position_vacant.html">凯里接入</a></li>
+                <li id="class4"><a rel="nofollow" href="admin/main/">后台管理</a></li>
+            </ul>
+			<div class="shar">
+				<div id="pwx"></div>
+				<div id="pwb"></div>
+				<div class="weixin_img"><img src="resources/images/index/getqrcode.jpg" ></img><p class="conmom_account">关注智行公交微信公众平台</p></div>
+		</div>
+		</div>
+		<div class="main">
+			<div class="main_a">
+				<div class="main_a_left">
+					<div id="main_a_left_up"></div>
+					<div id="main_a_left_down">
+						<div id="main_download">
+							<div id="main_download_android" onclick="download(this,'android')"></div>
+							<div id="main_download_ios" onclick="download(this,'ios')"></div>
+						</div>
+						<div id="main_scan"></div>
+					</div>
+				</div>
+				<div class="main_a_right">
+					<div id="main_a_right_image">
+						<div id="main_a_right_image_c"></div>
+					</div>
+				</div>
+			</div>
+			<div class="Clear"><!--如何你上面用到float,下面布局开始前最好清除一下。--></div>
+			<div class="main_b">
+				<div class="main_b_left"></div>
+				<div class="main_b_right"></div>
+			</div>
+			<div class="main_c">
+				<div class="main_c_right"></div>
+				<div class="main_c_left"></div>
+			</div>
+			<div class="main_d">
+				<div class="main_d_left"></div>
+				<div class="main_d_right"></div>
+			</div>
+			<div class="main_e">
+				<div class="main_e_right"></div>
+				<div class="main_e_left"></div>
+			</div>
+		</div>
+		<div class="footer">Copyright © 2015 智行公交 ® 贵州中科汉天下信息技术有限公司  © 官方版权所有 黔ICP备14004712号</div>
+		<div class="Clear"><!--如何你上面用到float,下面布局开始前最好清除一下。--></div>
+	</body>
+</html>

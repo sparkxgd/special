@@ -1,0 +1,369 @@
+package com.zhixingbus.server.utils;
+
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.Page;
+import com.zhixingbus.server.model.ArticleModel;
+import com.zhixingbus.server.model.ConfigModel;
+import com.zhixingbus.server.model.CooperationModel;
+import com.zhixingbus.server.model.MenuModel;
+
+/**
+ * web页面显示内容工具累
+ * @author xiao
+ * 2016年1月11日 14:51:16
+ *
+ */
+public class WebUtil {
+
+	/**
+	 * 创建首页菜单
+	 * xiao
+	 * 2016年1月11日 15:49:18
+	 */
+	public static void createIndexMenu(StringBuffer sb,List<MenuModel> menus,int menuid){
+		boolean isindex=false;
+		if(menuid==-1){
+			isindex=true;
+		}
+		sb.append("<ul class='Nav_ul'>");
+		int link=1;
+		for(MenuModel m:menus){
+			if (m.gettreeId() == -1) {
+				String linkn="Link"+link;
+				link++;
+				if(isindex){
+					sb.append("<li><a href='" + m.getpage() + "?id="+m.getId()+"' title='" + m.getname() + "' id='"+linkn+"' class='N_a Sy'>" + m.getname() + "</a>");
+					isindex=false;
+				}
+				else{
+					if(m.getId()==menuid){
+						sb.append("<li><a href='" + m.getpage() + "?id="+m.getId()+"' title='" + m.getname() + "' id='"+linkn+"' class='N_a Sy'>" + m.getname() + "</a>");
+					}else{
+						sb.append("<li><a href='" + m.getpage() + "?id="+m.getId()+"' title='" + m.getname() + "' id='"+linkn+"' class='N_a'>" + m.getname() + "</a>");
+					}
+				}
+				sb.append("<ul class='subnav'>");
+				for (MenuModel tm : menus) {
+					if (m.getId() == tm.gettreeId()) {
+						sb.append("<li><a href='" + tm.getpage() + "?id="+tm.getId()+"' title='" + tm.getname() + "'>" + tm.getname() + "</a></li>");
+					}
+				}
+				sb.append("</ul>");
+				sb.append("</li>");
+			}
+		}
+		sb.append("</ul>");
+	}
+	/**
+	 *  创建搜索条件
+	 *  xiao
+	 *  2016年1月11日 15:48:44
+	 */
+	public static void createSearchContent(StringBuffer sb,String searchName,String searchKey){
+		sb.append("<td>查询条件：</td>");
+		sb.append("<td>"+searchName+"</td><td>");
+		sb.append("<input type='text' name='searchKey' value='" + searchKey + "'/>");
+		sb.append("</td>");
+	}
+	/**
+	 * 创建菜单选择框
+	 * xiao
+	 * 2016年1月11日 15:49:18
+	 */
+	public static void createSelectMenu(StringBuffer sb,String name,List<MenuModel> menulist,MenuModel curr){
+		sb.append("<select name='"+name+"'>");
+		if(curr==null||curr.gettreeId()==-1)
+			sb.append("<option value='-1'>当前为父菜单</option>");
+		else
+			sb.append("<option value='"+curr.gettreeId()+"'>"+curr.getTreeName()+"("+curr.getTreeEnName()+")</option>");
+		for(MenuModel m:menulist){
+			sb.append("<option value='"+m.getId()+"'>"+m.getname()+"("+m.getenName()+")</option>");
+		}
+		sb.append("</select>");
+	}
+	/**
+	 * 创建是否显示选择框
+	 * xiao
+	 * 2016年1月11日 15:49:18
+	 */
+	public static void createSelectIsShow(StringBuffer sb,String name,MenuModel m){
+			sb.append("<select  name='"+name+"'>");
+		if (m == null) {
+			sb.append("<option value='1'>不显示</option>");
+			sb.append("<option value='0'>显示</option>");
+		}else{
+			if (m.getisShow() == 1) {
+				sb.append("<option value='1'>不显示</option>");
+				sb.append("<option value='0'>显示</option>");
+			} else {
+				sb.append("<option value='0'>显示</option>");
+				sb.append("<option value='1'>不显示</option>");
+			}
+		}
+		sb.append("</select>");
+	}
+	/**
+	 * 创建首页图文展示
+	 * xiao
+	 * 2016年1月11日 20:01:31
+	 */
+	public static void createTeletext(StringBuffer sb,MenuModel model,ArticleModel art){
+		String m_name="中科汉天下";
+		String m_enName="huntersun-info";
+		
+		if(model!=null){
+			m_name=model.getname();
+			m_enName=model.getenName();
+		}
+		if(art!=null){
+			String summary=art.getSummary();
+			if(summary.length()>130){
+				summary=summary.substring(0, 120);
+				summary=summary+"...";
+			}
+			sb.append("<div class='I_h2'>");
+		    sb.append("<div class='tab1'>");
+		    sb.append("	<span class='on' class='T1'>"+m_name+"<b>"+m_enName+"</b></span>");
+		    sb.append("</div>");
+		    sb.append("</div>");
+		    sb.append("<div class='clear'></div>");
+		    sb.append("<div class='I_view'>");
+		    sb.append("<p>"+summary+"</p>");
+		    sb.append("<a target='_blank' class='more' href='/see?id="+art.getId()+"&type="+art.gettype()+"'><strong>查看更多</strong></a>");
+		    sb.append("</div> ");
+//		    sb.append("<img src='../resources/framework/zhongkehan/images/201209291602208653.jpg' alt='贵州中科汉天下信息技术有限公司'> ");
+		    sb.append("<img  src='"+art.getheadImg()+"' alt='"+art.getTitle()+"'> ");
+		}else{
+			sb.append("<div class='I_h2'>");
+		    sb.append("<div class='tab1'>");
+		    sb.append("	<span  class='on' calss='T1'>"+m_name+"<b>"+m_enName+"</b></span>");
+		    sb.append("</div>");
+		    sb.append("</div>");
+		    sb.append("<div class='clear'></div>");
+		    sb.append("<div class='I_view'>");
+		    sb.append("<p>贵州中科汉天下信息技术有限公司是中科汉天下集团的子公司于2014年9月成立于贵阳高新区，公司是一家由来自国内顶级学府清华大学、北京大学、中科院、美国海归等具有丰富互联网从事经验的团队组建。</p><p>公司在数据获取与数据分析方面具有深厚的技术积累与敏锐的市场..</p>");
+		    sb.append("</div> ");
+		    sb.append("<img src='../resources/framework/zhongkehan/images/201209291602208653.jpg' alt='贵州中科汉天下信息技术有限公司'> ");
+		}
+    
+	}
+	/**
+	 * 创建首页信息列表展示
+	 * xiao
+	 * 2016年1月11日 20:01:31
+	 */
+	public static void createListShow(StringBuffer sb ,List<ArticleModel> p,MenuModel typeMode){
+		String name="";
+		String enMame="";
+		String href="/";
+		if(typeMode!=null){
+			name=typeMode.getname();
+			enMame=typeMode.getenName();
+			href=typeMode.getpage()+"?id="+typeMode.getId();
+		}
+		   sb.append("<div class='I_h2'>");
+		    sb.append("<div id='tab1'>");
+		    sb.append("<span  class='on' class='T1'>"+name+"<b>"+enMame+"</b>");
+		    sb.append("<a href='"+href+"' title='"+name+"'><img src='../resources/framework/zhongkehan/images/more.gif' alt='更多' title='更多' /></a></span>");
+		    sb.append("</div>");
+		    sb.append("</div>");
+		    sb.append("<div class='tablist1'>");
+		    sb.append("<ul>");
+		for(ArticleModel m:p){
+		    sb.append("<li><span class='Title'><a href='/see?id="+m.getId()+"&type="+m.gettype()+"'  target='_blank'>");
+		    sb.append(m.getTitle());
+		    sb.append("</a></span>");
+		    sb.append(DateUtils.date2y_m_dString(m.getPublishTime()));
+		    sb.append("</li>");
+		}
+    sb.append("</ul>");
+    sb.append("</div> ");
+	}
+	/**
+	 * 点击菜单进入详情页面的左侧菜单
+	 * xiao
+	 * 2016年1月12日 10:06:18
+	 */
+	public static void createDetailLeftMenu(StringBuffer sb ,List<MenuModel> mlist,MenuModel mm){
+		if(mm.gettreeId()==-1){//一级菜单
+			sb.append("<h2 class='I_h2'><strong>"+mm.getname()+"</strong>"+mm.getenName()+"</h2>");
+		}else{//二级菜单
+			sb.append("<h2 class='I_h2'><strong>"+mm.getTreeName()+"</strong>"+mm.getTreeEnName()+"</h2>");
+		}
+		sb.append("<ul class='L_ul'>");
+		for (MenuModel m:mlist) {
+			sb.append("<li><a href='"+m.getpage()+"?id="+m.getId()+"' title='"+m.getname()+"'>"+m.getname()+"</a></li>");
+		}
+		sb.append("</ul>");
+	}
+	/**
+	 * 创建列表内容
+	 * @param sb
+	 * @param p
+	 * @param treeId
+	 * @param searchKey
+	 */
+	public static void createListContent(StringBuffer sb, Page<ArticleModel> p, int treeId, String searchKey) {
+		if (p == null || p.getList().size() < 1) {
+			sb.append("暂无数据!");
+			return;
+		}
+		String search="";
+		if(!StringUtil.isBlankOrEmpty(searchKey)){
+			search="&searchKey="+searchKey;
+		}
+		sb.append("<ul class='News_ul'>");
+		for (ArticleModel m : p.getList()) {
+			sb.append("<li><span class='Title'>");
+			sb.append("<a href='/see?id=" + m.getId() + "&type=" + m.gettype() + "' target='_blank'>" + m.getTitle() + "</a></span>[" + DateUtils.date2y_m_dString(m.getPublishTime())+"]");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+		sb.append("<div class='Page'>");
+//		sb.append("<span>共").append(p.getTotalPage()).append("页</span><span>");
+//		sb.append(p.getTotalRow()).append("条</span><span>当前第").append(p.getPageNumber()).append("页</span>");
+
+		if (p.getTotalPage() <= 10) {
+			for (int i = 1; i <= p.getTotalPage(); i++) {
+				if (p.getPageNumber() == i) {
+					sb.append("<a class='currNum' class='pagenation_cru_a' href='/detailList?id=" + treeId + "&pageNumber=" + i + "&pageSize=" + p.getPageSize()
+							+ "&searchKey=" + searchKey + "'>" + i + "</a>");
+				} else {
+					sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + i + "&pageSize=" + p.getPageSize() + search+"'>" + i
+							+ "</a>");
+				}
+			}
+			if(p.getTotalPage()>p.getPageNumber())
+				sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + (p.getPageNumber()+1) + "&pageSize=" + p.getPageSize() + search+"'>下一页</a>");
+		} else {
+
+			int tolp = p.getPageNumber() + 5;
+			if (tolp > p.getTotalPage()) {
+				tolp = p.getTotalPage();
+			}
+			int lowp = p.getPageNumber() - 5;
+			if (lowp < 0) {
+				if (10 < p.getTotalPage()) {
+					tolp = 10;
+				}
+				for (int i = p.getPageNumber(); i <= tolp; i++) {
+					sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + i + "&pageSize=" + p.getPageSize() + search+ "'>" + i + "</a>");
+				}
+				if(p.getTotalPage()>p.getPageNumber())
+				sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + (p.getPageNumber()+1) + "&pageSize=" + p.getPageSize() + search
+						+ "'>下一页</a>");
+			} else {
+				sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber='1'&pageSize=" + p.getPageSize() + search+"'>首页</a>");
+				for (int i = lowp; i <= tolp - 1; i++) {
+					if (p.getPageNumber() == i) {
+						sb.append("<a class='currNum' href='/detailList?id=" + treeId + "&pageNumber=" + i + "&pageSize=" + p.getPageSize() + search + "'>" + i + "</a>");
+					} else {
+						sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + i + "&pageSize=" + p.getPageSize() + search + "'>" + i + "</a>");
+
+					}
+				}
+				sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + (p.getPageNumber()+1) + "&pageSize=" + p.getPageSize() + search
+						+ "'>下一页</a>");
+
+			}
+			sb.append("<span>...</span></li>");
+			sb.append("<a class='Num' href='/detailList?id=" + treeId + "&pageNumber=" + p.getTotalPage() + "&pageSize=" + p.getPageSize() + search
+					+ "'>尾页</a>");
+		}
+		sb.append("</div>");
+
+	}
+	/**
+	 * 位置选项
+	 * xiao
+	 * 2016年1月12日 14:09:48
+	 */
+	public static void createPositionSelect(StringBuffer sb,MenuModel m){
+		sb.append("<select name='position'>");
+		if(m!=null){
+			sb.append("<option value='"+m.getposition()+"'>"+m.getposition()+"</option>");
+		}
+		for(int i=1;i<11;i++){
+			sb.append("<option value="+i+">"+i+"</option>");
+		}
+		sb.append("</select>");
+	}
+	/**
+	 * 页面显示类型
+	 * xiao
+	 * 2016年1月12日 14:09:48
+	 */
+	public static void createPageSelect(StringBuffer sb,MenuModel m){
+		sb.append("<select name='page'>");
+		if(m!=null){
+			if("/".equals(m.getpage())){
+				sb.append("<option value='/'>首页</option>");
+			}else if("/detail".equals(m.getpage())){
+				sb.append("<option value='/detail'>详情页面</option>");
+			}else
+				sb.append("<option value='/detailList'>列表页面</option>");
+		}
+		sb.append("<option value='/'>首页</option>");
+		sb.append("<option value='/detail'>详情页面</option>");
+		sb.append("<option value='/detailList'>列表页面</option>");
+		sb.append("</select>");
+	}
+	/**
+	 * 页面显示类型
+	 * xiao
+	 * 2016年1月12日 14:09:48
+	 */
+	public static void createWrapper(StringBuffer sb,List<ArticleModel> list){
+		sb.append("<ul>");
+		for(ArticleModel m:list){
+			sb.append("<li><div onmouseover='on_div(this)' onmouseout='f_div(this)'>");
+			sb.append("<table cellpadding='0' cellspacing='0'><tr><td width='137' height='100' valign='middle'>");
+			sb.append("<img src='"+m.getheadImg()+"' width='217' height='117' alt='"+m.getTitle()+"' title='"+m.getTitle()+"'/>");
+			sb.append("</td></tr></table>");
+			sb.append("<a href='/see?id="+m.getId()+"&type="+m.gettype()+"' target='_blank' title='"+m.getTitle()+"'></a></div></li>");
+		}
+		sb.append("</ul>");
+	}
+	/**
+	 * 页面合作伙伴
+	 * xiao
+	 * 2016年1月12日 14:09:48
+	 */
+	public static void createCooperation(StringBuffer sb,List<CooperationModel> list){
+		sb.append("<select class='Select' onchange='javascript:window.open(this.options[this.selectedIndex].value)'>");
+		for(CooperationModel m:list){
+			sb.append("<option value='"+m.getwebsite()+"'>"+m.getname()+"</option>");
+		}
+		sb.append("</select>");
+	}
+	/**
+	 * 配置页面-选择key
+	 * xiao
+	 * 2016年1月12日 14:09:48
+	 */
+	public static void createSelectKey(StringBuffer sb,List<ConfigModel> list,String name){
+		sb.append("<select name='"+name+"' class='required'>");
+		for(ConfigModel m:list){
+			sb.append("<option value='"+m.getKey()+"'>"+m.getName()+"</option>");
+		}
+		sb.append("</select>");
+	}
+	/**
+	 * 配置页面-选择key
+	 * xiao
+	 * 2016年1月12日 14:09:48
+	 */
+	public static void createSelectKey(StringBuffer sb,List<ConfigModel> list,String name,ConfigModel model){
+		sb.append("<select name='"+name+"' disabled='disabled'>");
+		for(ConfigModel m:list){
+			if(m.getKey().equals(model.getKey())){
+				sb.append("<option selected='selected' value='"+m.getKey()+"'>"+m.getName()+"</option>");
+			}else{
+				sb.append("<option value='"+m.getKey()+"'>"+m.getName()+"</option>");
+			}
+			
+		}
+		sb.append("</select>");
+	}
+}

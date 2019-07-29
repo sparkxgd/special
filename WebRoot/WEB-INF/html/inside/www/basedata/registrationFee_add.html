@@ -1,0 +1,44 @@
+<div class="pageContent" style="height:overflow: auto;">
+	<form method="post" action="/admin/registrationFeeSave"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+					<label>班级类型:</label>
+					<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+					<input name="ClassType.id" value="" type="hidden" />
+					<input class="required" name="ClassType.name" type="text"  postField="name" suggestFields="id,name" 
+						suggestUrl="/admin/lookClassType" lookupGroup="ClassType"/>
+				</p>
+				<p>
+					<label>年级:</label>
+					<input name="Grade.id" value="" type="hidden" />
+					<input class="required" name="Grade.name" type="text"  postField="name" suggestFields="id,name" 
+						suggestUrl="/admin/lookGrade" lookupGroup="Grade"/>
+				</p>
+				<p>
+					<label>价格:</label>
+					<input name="price" value="" type="text" class="required number" min="1"/>
+				</p>
+				<p>
+					<label>备注:</label>
+					<input name="remark" value="" />
+				</p>
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

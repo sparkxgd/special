@@ -1,0 +1,65 @@
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+<div class="pageHeader">
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/masterplates" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				${(searchContent)!}
+			</tr>
+		</table>
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">查询</button></div></div></li>
+			</ul>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="/admin/masterplateAdd?navTabId=${(navTabId)!}"
+				target="navTab" mask="true" title="添加模版"><span>添加</span></a></li>
+			<li><a class="edit" href="/admin/masterplateEditor?id={sid}&navTabId=${(navTabId)!}"
+				target="navTab" warn="请选择一条信息" mask="true" title="修改模版"><span>修改</span></a></li>
+		</ul>
+	</div>
+	<table class="list" layoutH="116" targetType="navTab">
+		<thead>
+			<tr>
+				<th width="22"></th>
+				<th width="220">模版id</th>
+				<th width="220">模版名称</th>
+				<th width="120">样式</th>
+				<th width="120">创建时间</th>
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target='sid' rel="${(d.id)!}">
+				<td></td>
+				<td>${(d.id)!}</td>
+				<td>${(d.tempName)!}</td>
+				<td>${(d.css)!}</td>
+				<td>${(d.createTime)!}</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

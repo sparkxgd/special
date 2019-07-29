@@ -1,0 +1,36 @@
+<h2 class="contentTitle">表单验证</h2>
+
+
+<div class="pageContent">
+	
+	<form method="post" action="demo/common/ajaxDone.html" class="pageForm required-validate" onsubmit="return validateCallback(this)">
+		<div class="pageFormContent nowrap" layoutH="97">
+		<p>
+		<label>名称:</label>
+		<label>名称:</label>
+		<label>名称:</label>
+		<label>名称:</label>
+		<label>名称:</label>
+		<label>名称:</label>
+		</p>
+			<div class="divider"></div>
+			<p>自定义扩展请参照：dwz.validate.method.js</p>
+			<p>错误提示信息国际化请参照：dwz.regional.zh.js</p>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+	
+</div>
+
+
+<script type="text/javascript">
+function customvalidXxx(element){
+	if ($(element).val() == "xxx") return false;
+	return true;
+}
+</script>

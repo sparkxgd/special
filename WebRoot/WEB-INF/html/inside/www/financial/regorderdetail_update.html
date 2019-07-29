@@ -1,0 +1,89 @@
+<div class="pageContent" layouth="20"
+	style="height: overflow :     auto;">
+	<form method="post" action="/admin/regorderDetailUpdate"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent">
+			<dl class="nowrap">
+				<dt>
+					交费时间:
+				</dt>
+				<dd>
+					<input name="navTabId" type="hidden" value="${(navTabId)!}" />
+					<input name="id" type="hidden" value="${(d.id)!}" />
+					${(d.createTime)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					支付方式:
+				</dt>
+				<dd>
+					${(d.modelStr)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					交费人:
+				</dt>
+				<dd>
+					${(d.payer)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					联系方式:
+				</dt>
+				<dd>
+					${(d.payerTel)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					经手人:
+				</dt>
+				<dd>
+					${(d.operator)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					交费金额:
+				</dt>
+				<dd>
+					<input name="actualCost" type="text" value="${(d.total)!}"  class="required number" min="1" max="${(d.total)!}"/>元
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					备注:
+				</dt>
+				<dd>
+					<input name="remark" type="text" value="${(d.remark)!}"/>
+				</dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li>
+					<div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">
+								保存
+							</button>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">
+								取消
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

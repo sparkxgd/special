@@ -1,0 +1,42 @@
+<form action="/admin/consultDetailUpdate?navTabId=${(navTabId)!}" method="post" class="pageForm" onsubmit="return validateCallback(this, navTabAjaxDone)">
+<div class="pageContent">
+	<div class="pageFormContent" layoutH="56">
+		
+		<dl class="nowrap">
+				<dt>
+					处理结果:
+				</dt>
+				<dd>
+					<select name="state">
+						<option value="0">
+							已经处理
+						</option>
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+			<dt>处理人：</dt>
+			<dd>
+				<input name="receiver.id" value="" type="hidden" class="required"/>
+				<input name="receiver.id" value="" type="hidden" class="required"/>
+				<input class="required" name="receiver.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookEmployee" lookupGroup="receiver"/>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+			<dt>处理原因：</dt>
+			<dd>
+				<input name="remark" value="" />
+			</dd>
+		</dl>
+		<div class="divider"></div>
+		
+	</div>
+	<div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button class="close" type="button">关闭</button></div></div></li>
+		</ul>
+	</div>
+</div>
+</form>

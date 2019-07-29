@@ -1,0 +1,142 @@
+<form action="/admin/consultDetailSave?navTabId=${(navTabId)!}" method="post" class="pageForm" onsubmit="return validateCallback(this, navTabAjaxDone)">
+<div class="pageContent">
+	<div class="pageFormContent" layoutH="56">
+		
+		<dl class="nowrap">
+			<dt>咨询时间：</dt>
+			<dd>
+				<input  type="text" class="date required" name="time"  readonly="true" dateFmt="yyyy-MM-dd HH:mm:ss"/>
+				<a class="inputDateButton" href="javascript:;">选择</a>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+			<dt>咨询地点：</dt>
+			<dd>
+				<input name="campus.id" value="" type="hidden" />
+				<input class="required" name="campus.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookCampus" lookupGroup="campus"/>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+			<dt>咨询人：</dt>
+			<dd>
+				<input name="advocate" class="required" value=""/>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+			<dt>咨询人电话：</dt>
+			<dd>
+				<input name="tel" class="required" value=""/>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+				<dt>
+					咨询人类型:
+				</dt>
+				<dd>
+					<select name="receiverType">
+						<option value="0">
+							学生
+						</option>
+						<option value="1">
+							家长
+						</option>
+						<option value="2">
+							朋友
+						</option>
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+			<dt>接待人：</dt>
+			<dd>
+				<input name="receiver.id" value="" type="hidden" class="required"/>
+				<input class="required" name="receiver.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookEmployee" lookupGroup="receiver"/>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+				<dt>
+					咨询途径:
+				</dt>
+				<dd>
+					<select name="channel">
+						<option value="5">
+							到校咨询
+						</option>
+						<option value="1">
+							传单
+						</option>
+						<option value="0">
+							网络
+						</option>
+						<option value="2">
+							朋友介绍
+						</option>
+						<option value="3">
+							招生队
+						</option>
+						<option value="4">
+							其他
+						</option>
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+			<dt>负责人：</dt>
+			<dd>
+				<input name="responsible.id" value="" type="hidden" >
+				<input name="responsible.name" class="required" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookEmployee" lookupGroup="responsible"/>
+			</dd>
+		</dl>
+		<dl class="nowrap">
+			<dt>备注：</dt>
+			<dd>
+				<input name="remark" value="" />
+			</dd>
+		</dl>
+		<div class="divider"></div>
+		
+		<div class="tabs">
+			<div class="tabsContent" style="height: 150px;">
+				<div>
+					<table class="list nowrap itemDetail" addButton="添加咨询科目信息" width="100%">
+						<thead>
+							<tr>
+								<th type="hidden" name="rows" defaultVal="#index#" size="5" ></th>
+								<th type="lookup" name="d[#index#].subject.name" lookupGroup="d[#index#].subject" suggestUrl="/admin/lookSubjec" postField="name" suggestFields="id,name" size="12" fieldClass="required">报读科目</th>
+								<th type="lookup" name="d[#index#].grade.name" lookupGroup="d[#index#].grade" suggestUrl="/admin/lookGrade" postField="name" suggestFields="id,name" size="12" fieldClass="required">报读年级</th>
+								<th type="lookup" name="d[#index#].classType.name" lookupGroup="d[#index#].classType" suggestUrl="/admin/lookClassType" postField="name" suggestFields="id,name" size="12" fieldClass="required">报读类型</th>
+								<th type="text" name="d[#index#].score" defaultVal="112" size="12" fieldClass="required">学科成绩</th>
+								<th type="lookup" name="d[#index#].school.name" lookupGroup="d[#index#].school" suggestUrl="/admin/lookSchool" postField="name" suggestFields="id,name" size="12" fieldClass="required">就读学校</th>
+								<th type="text" name="d[#index#].detailremark" defaultVal="" size="15">
+								备注</th>
+								<th type="del" width="60">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+						<tfoot>
+						<tr>
+						<td></td>
+						</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="tabsFooter">
+				<div class="tabsFooterContent">
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">保存</button></div></div></li>
+			<li><div class="button"><div class="buttonContent"><button class="close" type="button">关闭</button></div></div></li>
+		</ul>
+	</div>
+</div>
+</form>

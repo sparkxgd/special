@@ -1,0 +1,186 @@
+<form action="/admin/studentSigin_student_save?navTabId=${(navTabId)!}"
+	method="post" class="pageForm"
+	onsubmit="return validateCallback(this, dialogAjaxDone)">
+	<div class="pageContent">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>
+					班级(ID:${(m.id)!})：
+				</dt>
+				<dd>
+					<input name="classinfoId" value="${(m.id)!}" type="hidden" />
+					<input name="no" value="${(no)!}" type="hidden" />
+					<input name="rows" value="${(rows)!}" type="hidden" />
+					<p>
+						${(m.name)!}|${(m.employeeName)!}  == 第   ${(no)!}   次课
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt>
+					上课教师：
+				</dt>
+				<dd>
+					<input name="e.id" value="" type="hidden" />
+					<input class="required" name="e.name" type="text" postField="name"
+						suggestFields="id,name" suggestUrl="/admin/lookEmployee"
+						lookupGroup="e" />
+				</dd>
+			</dl>
+			<dl>
+				<dt>
+					上课教室：
+				</dt>
+				<dd>
+					<input name="c.id" value="" type="hidden" />
+					<input class="required" name="c.name" type="text" postField="name"
+						suggestFields="id,name" suggestUrl="/admin/lookClassroom"
+						lookupGroup="c" />
+				</dd>
+			</dl>
+			<dl>
+				<dt>
+					上课时间：
+				</dt>
+				<dd>
+					<input type="text" class="date required" name="gotime"
+						readonly="true" dateFmt="yyyy-MM-dd HH:mm:ss" />
+					<a class="inputDateButton" href="javascript:;">选择</a>
+				</dd>
+			</dl>
+			<dl>
+				<dt>
+					上课类型：
+				</dt>
+				<dd>
+					<input type="radio" name="type" checked="checked" value="1"
+						onclick="res(1)" />
+					正常上课
+					<input type="radio" name="type" value="0" onclick="res(0)" />
+					补课
+				</dd>
+			</dl>
+			<table class="table" width="100%" layoutH="200">
+				<thead>
+					<tr>
+						<th>
+							学生
+						</th>
+						<th>
+							签到
+						</th>
+						<th>
+							是否有效
+						</th>
+						<th>
+							上课类型
+						</th>
+						<th>
+							备注
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list list as d>
+					<tr class="unitBox">
+						<td>
+							(${(d.studentId)!})-${(d.studentName)!}
+							<input name="ob[${d_index}].studentId" value="${(d.studentId)!}"
+								type="hidden" class="required" />
+						</td>
+						<td>
+							<select name="ob[${d_index}].login" class="login_aaa">
+								<option value="1">
+									是
+								</option>
+								<option value="0">
+									否
+								</option>
+							</select>
+						</td>
+						<td>
+							<select name="ob[${d_index}].availd" class="availd_aaa">
+								<option value="1">
+									有效
+								</option>
+								<option value="0">
+									无效
+								</option>
+							</select>
+						</td>
+						<td>
+							<label class="typeInput">
+								正常上课
+							</label>
+						</td>
+						<td>
+							<input type="text" name="ob[${d_index}].remark" value=""
+								size="30">
+						</td>
+					</tr>
+					</#list>
+				</tbody>
+			</table>
+			<div class="tabsFooter">
+				<div class="tabsFooterContent">
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="formBar">
+		<ul>
+			<li>
+				<div class="buttonActive">
+					<div class="buttonContent">
+						<button type="submit">
+							保存
+						</button>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="button">
+					<div class="buttonContent">
+						<button class="close" type="button">
+							关闭
+						</button>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</form>
+<script type="text/javascript">
+function res(cs)
+{
+	if(cs==0){
+		$(".typeInput").html("补课");
+		$(".login_aaa option").each(function(){
+		 if($(this).val()==0){
+		      $(this).attr("selected",true);
+		   }
+		});
+		$(".availd_aaa option").each(function(){
+		 if($(this).val()==0){
+		      $(this).attr("selected",true);
+		   }
+		});
+	}
+	else{
+		$(".typeInput").html("正常上课");
+		$(".login_aaa option").each(function(){
+		 if($(this).val()==1){
+		      $(this).attr("selected",true);
+		   }
+		});
+		$(".availd_aaa option").each(function(){
+		 if($(this).val()==1){
+		      $(this).attr("selected",true);
+		   }
+		});
+	}
+	
+}
+</script>
+

@@ -1,0 +1,52 @@
+<div class="pageContent" style="height:overflow: auto;">
+	<form method="post" action="/admin/studentContinueRegistSave"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+					<label>学生:</label>
+					<input readonly="true" class="required" type="text" size="30"  value="${m.studentName}" />
+					<input name="classTypeId" type="hidden" value="${(m.classTypeId)!}"/>
+					<input name="gradeId" type="hidden" value="${(m.gradeId)!}"/>
+					<input name="studentRegId" type="hidden" value="${(m.id)!}"/>
+				</p>
+				<p>
+					<label>年级:</label>
+					<input readonly="true"  type="text" size="30"  value="${m.gradeName}" />
+				</p>
+				<p>
+					<label>科目:</label>
+					<input readonly="true" type="text" size="30"  value="${m.subjectName}" />
+				</p>
+				<p>
+					<label>类型:</label>
+					<input readonly="true"  type="text" size="30"  value="${m.classTypeName}" />
+				</p>
+				<p>
+					<label>续报课时:</label>
+					<input name="regNumber" class="required digits" type="text" size="30"  value="8" />
+				</p>
+				<p>
+					<label>备注:</label>
+					<input name="remark" type="text" size="30"  value="" />
+				
+				</p>
+				
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

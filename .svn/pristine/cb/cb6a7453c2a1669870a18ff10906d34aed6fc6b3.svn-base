@@ -1,0 +1,49 @@
+<div class="pageContent">
+	<form method="post" action="/admin/adminUpdate"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this,dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+				<label>id:</label>
+				<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+				<input name="id" readonly="readonly" class="textInput readonly" type="text" size="30" value="${(model.id)}"/>
+				</p>
+				<p>
+					<label>登录名:</label>
+					<input name="name" class="required" type="text" size="30" value="${(model.name)}"/>
+				</p>
+				<p>
+					<label>类型:</label>
+					${(type)!}
+				</p>
+				<p>
+					<label>新密码:</label>
+					<input name="password1" class="required password" type="password" size="30"/>
+				</p>
+				<p>
+					<label>确认新密码:</label>
+					<input name="password" class="required password" type="password" size="30"/>
+				</p>
+				<p>
+					<label>原密码:</label>
+					<input name="oldpassword" class="required password" type="password" size="30"/>
+				</p>
+				
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存更新</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

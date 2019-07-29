@@ -1,0 +1,31 @@
+.zxb_gd_map_businfo {
+	background:url('../images/map/marker_normal_original_icon.png') no-repeat;
+	width:20px;
+	height:25px;
+	text-align:center;
+	align:center;
+	background-size:cover;
+}
+.zxb_gd_map_businfo span{
+	color:#fcf16e;
+	 font-size:12px;
+	 font-family:Times New Roman;
+	text-align:center;
+	align:center;
+	 }
+.zxb_gd_map_station {
+	background:url('../images/map/bus_station_icon.png') no-repeat;
+	width:22px;
+	height:20px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
+	text-align:center;
+	align:center;
+	background-size:cover;
+}
+.zxb_gd_map_station span{
+	color:#FFFFFF;
+	font-family:ËÎÌו;
+	font-size:10px;
+}

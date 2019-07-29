@@ -1,0 +1,79 @@
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="studentId" value="${(studentId)!}" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+<div class="pageHeader">
+		<div class="panelContent">
+				<h2 class="contentTitle">学生ID：${(m.id)!}</h2>
+				<h2 class="contentTitle">学生：${(m.name)!}-----试听信息</h2>
+		</div>
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/studentAuditionInfos" method="post">
+	<div class="searchBar">
+		<ul class="searchContent">
+			<li>
+				<label>名称：</label>
+				<input type="text" name="searchKey"/>
+			</li>
+		</ul>
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">点击查询
+
+</button></div></div></li>
+			</ul>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+	</div>
+	<table class="list" layoutH="116">
+		<thead>
+			<tr>
+				<th width="130">试听编号</th>
+				<th width="100">学科</th>
+				<th width="100">年级</th>
+				<th width="150">时间</th>
+				<th width="100">教室</th>
+				<th width="100">试讲老师</th>
+				<th width="100">结果</th>
+				<th width="100">备注</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target="sid" rel="${(d.id)!}">
+				<td>${(d.id)!}</td>
+				<td>${(d.subjectName)!}</td>
+				<td>${(d.gradeName)!}</td>
+				<td>${(d.time)!}</td>
+				<td>${(d.classroomName)!}</td>
+				<td>${(d.teacherName)!}</td>
+				<td>${(d.resultStr)!}</td>
+				<td>${(d.remark)!}</td>
+				<td>
+				<a class="btnEdit" href="../admin/audition_update?id=${(d.id)!}&navTabId=${(navTabId)!}" target="dialog" mask="true" title="${(d.studentName)!}--${(d.gradeName)!}${(d.subjectName)!}--(${(d.teacherName)!}老师)试听">试听结果</a>
+				</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" 
+
+pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

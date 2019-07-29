@@ -1,0 +1,165 @@
+<div class="pageContent" layouth="20"
+	style="height: overflow :     auto;">
+	<form method="post" action="/admin/employeeSave"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this,navTabAjaxDone)">
+		<div class="pageFormContent">
+			<dl class="nowrap">
+				<dt>
+					员工姓名:
+				</dt>
+				<dd>
+					<input name="navTabId" type="hidden" value="${(navTabId)!}" />
+					<input name="name" class="required" type="text" value=""
+						alt="请输入员工姓名" />
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					性别:
+				</dt>
+				<dd>
+					<select name="sex">
+						<option value="1">
+							男
+						</option>
+						<option value="2">
+							女
+						</option>
+						<option value="0">
+							未知
+						</option>
+					</select>
+				</dd>
+			</dl>
+				<dl class="nowrap">
+				<dt>
+					职工类型:
+				</dt>
+				<dd>
+					<select name="type">
+						<option value="1">
+							全职
+						</option>
+						<option value="0">
+							兼职
+						</option>
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					职位:
+				</dt>
+				<dd>
+				<input name="Position.id" value="" type="hidden" />
+				<input class="required" name="Position.name" type="text"  postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookPosition" lookupGroup="Position"/>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					身份证号:
+				</dt>
+				<dd>
+					<input name="identification" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					出生年月:
+				</dt>
+				<dd>
+					<input name="borthday" class="date" [dateFmt="yyyy-MM-dd"]></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					籍贯:
+				</dt>
+				<dd>
+					<input name="nativePlace" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					联系电话:
+				</dt>
+				<dd>
+					<input name="tel" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					qq:
+				</dt>
+				<dd>
+					<input name="qq" type="text" ></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					微信:
+				</dt>
+				<dd>
+					<input name="weixin" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					住址:
+				</dt>
+				<dd>
+					<input name="addr" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					家庭地址:
+				</dt>
+				<dd>
+					<input name="homeAddr" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					技能:
+				</dt>
+				<dd>
+					<input name="skill" type="text"></input>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					专业:
+				</dt>
+				<dd>
+					<input name="major" type="text"></input>
+				</dd>
+			</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li>
+					<div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">
+								保存
+							</button>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">
+								取消
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

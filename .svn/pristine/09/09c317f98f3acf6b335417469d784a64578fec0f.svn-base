@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>智行公交后台管理平台</title>
+<link href="../resources/framework/dwz_jui/themes/css/login.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" href="../resources/favicon.ico"/>
+</head>
+
+<body>
+	<div id="login">
+		<div id="login_header">
+			<h1 class="login_logo">
+				<a href="http://www.zhixingbus.com"><img src="../resources/framework/dwz_jui/themes/default/images/logo.png" /></a>
+			</h1>
+			<div class="login_headerContent">
+				<div class="navList">
+					<ul>
+						<li><a href="http://www.zhixingbus.com">首页</a></li>
+					</ul>
+				</div>
+				<h2 class="login_title"><img src="../resources/framework/dwz_jui/themes/default/images/login_title.png" /></h2>
+			</div>
+		</div>
+		<div id="login_content">
+			<div class="loginForm">
+				<form action="/admin/login" method="post">
+					<p style="color: red;text-align: center;">
+						${(error)!}
+					</p>
+					<p>
+						<label>用户名：</label>
+						<input type="text" name="username" size="20" class="login_input" />
+					</p>
+					<p>
+						<label>密码：</label>
+						<input type="password" name="password" size="20" class="login_input" />
+					</p>
+					<div class="login_bar">
+						<input class="sub" type="submit" value=" " />
+					</div>
+				</form>
+			</div>
+			<div class="login_banner"><img src="../resources/framework/dwz_jui/themes/default/images/login_banner.jpg" /></div>
+			<div class="login_main">
+				<ul class="helpList">
+					<li><a href="/">智行公交</a></li>
+				</ul>
+				<div class="login_inner">
+				</div>
+			</div>
+		</div>
+		<div id="login_footer">
+			Copyright &copy; 2015 www.zhixingbus.com Inc. All Rights Reserved.
+		</div>
+	</div>
+</body>
+</html>

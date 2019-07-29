@@ -1,0 +1,84 @@
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+<div class="pageHeader">
+
+<div class="panelContent">
+		<h2 class="contentTitle">
+			学生（ID）：${(m.name)!}（${(m.id)!}）
+		</h2>
+</div>
+
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/studentAllInfos" method="post">
+	<div class="searchBar">
+		<div class="subBar">
+		</div>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="/admin/studentRegistration_add?navTabId=${(navTabId)!}" target="navTab" mask="true" title="学生报名"><span>学生报名</span></a></li>
+		
+		</ul>
+	</div>
+	<table class="list" layoutH="116">
+		<thead>
+			<tr>
+				<th width="130">报名时间</th>
+				<th width="60">报读科目</th>
+				<th width="100">报读类型</th>
+				<th width="60">报读年级</th>
+				<th width="60">报读课时</th>
+				<th width="60">有效课时</th>
+				<th width="60">完成课时</th>
+				<th width="70">应交费用</th>
+				<th width="70">实交金额</th>
+				<th width="100">费用状态</th>
+				<th width="100">排课状态</th>
+				<th width="70">报名状态</th>
+				<th width="150">备注</th>
+				<th width="70">操作</th>
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target="sid" rel="${(d.id)!}">
+				<td>${(d.regTime)!}</td>
+				<td>${(d.subjectName)!}</td>
+				<td>${(d.classTypeName)!}</td>
+				<td>${(d.gradeName)!}</td>
+				<td>${(d.regNum)!}</td>
+				<td>${(d.youxiaoNumber)!}</td>
+				<td>${(d.finishNumber)!}</td>
+				<td>${(d.mustCost)!}元</td>
+				<td>${(d.actualCost)!}元</td>
+				<td>${(d.stateStr)!}</td>
+				<td>${(d.stuClassStr)!}</td>
+				<td>${(d.availdStr)!}</td>
+				<td>${(d.remark)!}</td>
+				<td><a class="btnView" href="../admin/opStudentpayOrder?studentRegId=${(d.id)!}&studentId=${(d.studentId)!}" target="navTab" title="查看学生交费订单详情"><span>详情</span></a>
+				<a title="你确定要删除？" target="ajaxTodo" href="../admin/delStuReg?id=${(d.id)!}&navTabId=${(navTabId)!}" class="btnDel">删除</a>
+				</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" 
+
+pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

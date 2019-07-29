@@ -1,0 +1,88 @@
+<div class="pageContent" layouth="20" style="height:overflow: auto;">
+	<form method="post" action="/admin/studentUpdate"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this,navTabAjaxDone)">
+		<div class="pageFormContent">
+				<dl class="nowrap">
+					<dt>学生id:</dt>
+					<dd>
+					<input name="id" class="textInput readonly" type="text" value="${(model.id)!}"/>
+					<input name="navTabId" type="hidden" value="${(navTabId)!}"/>
+					
+					</dd>
+				</dl>
+				<dl class="nowrap">
+					<dt>学生姓名:</dt>
+					<dd><input name="name" class="required" type="text" value="${(model.name)!}" alt="请输入学生姓名"/></dd>
+				</dl>
+				<dl class="nowrap">
+				<dt>
+					性别:
+				</dt>
+				<dd>
+					${(selectSex)!}
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					生日:
+				</dt>
+				<dd>
+					<input name="borthday" class="date" [dateFmt="yyyy-MM-dd"] value="${(model.borthday)!}"></input>
+				</dd>
+			</dl>
+			<fieldset>
+			<legend>学生详细信息</legend>
+				<dl class="nowrap">
+					<dt>联系电话:</dt>
+					<dd><input name="tel" class="required phone" type="text" value="${(model.tel)!}" alt="请输入学生电话"/></dd>
+				</dl>
+				<dl class="nowrap">
+					<dt>家长联系电话:</dt>
+					<dd><input name="parentTel"  type="text" class="phone" value="${(model.parentTel)!}" alt="请输入学生家长电话"/></dd>
+				</dl>
+				<dl class="nowrap">
+					<dt>在读学校:</dt>
+					<dd>
+					<input name="school.id"  type="hidden" value="${(model.school)!}"/>
+					<input class="required" name="school.name" type="text"  value="${(model.schoolName)!}" postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookSchool" lookupGroup="school"/>
+					</dd>
+				</dl>
+				<dl class="nowrap">
+					<dt>年级:</dt>
+					<dd>
+					<input name="grade.id"  type="hidden" value="${(model.grade)!}"/>
+					<input class="required" name="grade.name" type="text" value="${(model.gradeName)!}" postField="name" suggestFields="id,name" 
+					suggestUrl="/admin/lookGrade" lookupGroup="grade"/>
+					</dd>
+				</dl>
+				<dl class="nowrap">
+					<dt>状态:</dt>
+					<dd>${(selectstateStr)!}</dd>
+				</dl>
+				<dl class="nowrap">
+			<dt>备注：</dt>
+			<dd>
+				<input name="remark" value="${(model.remark)!}" />
+			</dd>
+		</dl>
+			</fieldset>
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存更新</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,97 @@
+
+<form id="pagerForm" method="post" action="#rel#">
+	<input type="hidden" name="pageNumber" value="1" />
+	<input type="hidden" name="pageSize" value="${page.pageSize}" />
+</form>
+
+<div class="pageHeader">
+		<div class="panelContent">
+				<h2 class="contentTitle">学生ID：${(stu.id)!}</h2>
+				<h2 class="contentTitle">学生：${(stu.name)!}-----报读班级信息</h2>
+		</div>
+		<div class="divider"></div>
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="/admin/classInfos" method="post">
+	<div class="searchBar">
+		<ul class="searchContent">
+			<li>
+				<label>班级名称：</label>
+				<input type="text" name="searchKey"/>
+			</li>
+			<li>
+				<label>班主任：</label>
+				<input type="text" name="teacher"/>
+			</li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">点击查询</button></div></div>
+			</li>
+			</ul>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="edit" href="/admin/classRcords?searchKey={sid}&navTabId=${(navTabId)!}" target="navTab" mask="true" warn="请选择一信息"  title="班级上课记录"><span>查看班级上课记录</span></a></li>
+			<li><a class="edit" href="/admin/changeStudentToClass?student_id=${(stu.id)!}&class_id={sid}&navTabId=${(navTabId)!}" target="dialog" mask="true" warn="请选择一信息"  title="更换班级"><span>更换班级</span></a></li>
+		</ul>
+	</div>
+	<table class="table" layoutH="116">
+		<thead>
+			<tr>
+				<th width="50">ID</th>
+				<th width="150">班级名称</th>
+				<th width="150">加入时间</th>
+				<th width="150">退出时间</th>
+				<th width="100">完成课时</th>
+				<th width="100">状态</th>
+				<th width="100">班主任</th>
+				<th width="100">班级人数</th>
+				<th width="100">年级</th>
+				<th width="100">科目</th>
+				<th width="100">班级类型</th>
+				<th width="150">上课时间段</th>
+				<th width="150">开班时间</th>
+				<th width="150">结束时间</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+			<#list page.getList() as d>
+			<tr target='sid' rel="${(d.classinfoId)!}">
+				<td>${(d.classinfoId)!}</td>
+				<td>${(d.name)!}</td>
+				<td>${(d.intTime)!}</td>
+				<td>${(d.outTime)!}</td>
+				<td><a href="../admin/studentGoClassInfos?studentId=${(stu.id)!}&classInfoId=${(d.classinfoId)!}" target="navTab" rel="studentGoClassInfos${(d.classinfoId)!}" title="${(stu.name)!}--${(d.name)!}---上课签到记录">${(d.classNo)!}</a></td>
+				<td>${(d.stateStr)!}</td>
+				<td>${(d.employeeName)!}</td>
+				<td><a href="../admin/classStudentInfos?classId=${(d.classinfoId)!}" target="navTab" rel="classStudentInfos${(d.classinfoId)!}" title="${(d.name)!}---班级学生名单">${(d.stuNo)!}</a></td>
+				<td>${(d.gradeName)!}</td>
+				<td>${(d.subjectName)!}</td>
+				<td>${(d.classTypeName)!}</td>
+				<td>${(d.timeSlotName)!}</td>
+				<td>${(d.startTime)!}</td>
+				<td>${(d.endTime)!}</td>
+				<td>
+				<a class="btnView" href="../admin/viweClassStudent?classId=${(d.classinfoId)!}" target="navTab" rel="viweClassStudent" title="查看班级详情">详情</a>
+
+				</td>
+			</tr>
+			</#list>
+		<tbody>
+		</tbody>
+	</table>
+	<div class="panelBar">
+		<div class="pages">
+			<span>显示</span>
+			<select name="pageSize" onchange="navTabPageBreak({pageSize:this.value})">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="200">200</option>
+			</select>
+			<span>条，共${page.totalRow}条</span><span> 共${page.totalPage}页</span>
+		</div>
+		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" 
+
+pageNumShown="10" currentPage="${page.pageNumber}"></div>
+	</div>
+</div>

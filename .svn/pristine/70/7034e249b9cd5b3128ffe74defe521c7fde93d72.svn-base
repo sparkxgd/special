@@ -1,0 +1,113 @@
+package com.zhixingbus.server.config;
+
+import com.alibaba.druid.filter.stat.StatFilter;
+import com.alibaba.druid.wall.WallFilter;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
+import com.jfinal.core.Const;
+import com.jfinal.kit.Prop;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.druid.DruidPlugin;
+import com.zhixingbus.server.controller.AdminController;
+import com.zhixingbus.server.controller.UploadFileController;
+import com.zhixingbus.server.controller.WebController;
+import com.zhixingbus.server.model.AdminModel;
+import com.zhixingbus.server.model.ArticleModel;
+import com.zhixingbus.server.model.CommentsModel;
+import com.zhixingbus.server.model.ConfigModel;
+import com.zhixingbus.server.model.CooperationModel;
+import com.zhixingbus.server.model.MenuModel;
+import com.zhixingbus.server.model.SuggestModel;
+import com.zhixingbus.server.model.VisitorModel;
+
+
+public class ServerConfig extends JFinalConfig {
+
+	@Override
+	/**
+	 * 配置常量
+	 */
+	public void configConstant(Constants constants) {
+		// TODO Auto-generated method stub
+		loadPropertyFile("WebConfig.txt");
+		boolean devMode = getPropertyToBoolean("devMode", true);
+		constants.setDevMode(devMode);	
+		//默认10M,此处设置为最大100M
+		constants.setMaxPostSize(10*Const.DEFAULT_MAX_POST_SIZE);
+		Prop prop = PropKit.use("service.properties");
+		ServiceConfig.PoseidonServiceHost = prop.get("poseidonServiceHost");
+		ServiceConfig.RedPackServiceHost = prop.get("RedPackServiceHost");
+		ServiceConfig.AresServiceHost = prop.get("AresServiceHost");
+		ServiceConfig.phones = prop.get("phones");
+		ServiceConfig.apolloServiceHost = prop.get("apolloServiceHost");
+
+	}
+
+	@Override
+	/**
+	 * 配置路由
+	 */
+	public void configRoute(Routes routes) {
+		routes.add("/", WebController.class,"/WEB-INF/html/external/www");
+		routes.add("/admin", AdminController.class, "/WEB-INF/html");
+		routes.add("/upload",UploadFileController.class,"/WEB-INF/html");
+	}
+
+	@Override
+	/**
+	 * 配置插件
+	 */
+	public void configPlugin(Plugins plugins) {
+		// TODO Auto-generated method stub
+		DruidPlugin dp = new DruidPlugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
+		{
+			dp.addFilter(new StatFilter());
+			WallFilter wall = new WallFilter();
+			wall.setDbType("mysql");
+			dp.addFilter(wall);
+			dp.setTestOnBorrow(true);
+			dp.setTestOnReturn(true);
+			dp.setMaxWait(20000);
+		}
+		plugins.add(dp);
+		ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
+		boolean showSql = getPropertyToBoolean("showSql", true);
+		arp.setShowSql(showSql);
+		{
+			arp.addMapping("tb_admin_x", AdminModel.class);
+			arp.addMapping("tb_article_x", ArticleModel.class);
+			arp.addMapping("tb_comments", CommentsModel.class);
+			arp.addMapping("tb_menu", MenuModel.class);
+			arp.addMapping("tb_visitor", VisitorModel.class);
+			arp.addMapping("tb_suggest", SuggestModel.class);
+			arp.addMapping("tb_cooperation", CooperationModel.class);
+			arp.addMapping("tb_config", ConfigModel.class);
+		}
+		plugins.add(arp);
+	}
+
+	@Override
+	/**
+	 * 配置全局拦截器
+	 */
+	public void configInterceptor(Interceptors me) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	/**
+	 * 配置处理器
+	 */
+	public void configHandler(Handlers me) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+}

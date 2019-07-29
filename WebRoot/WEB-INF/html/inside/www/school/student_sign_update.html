@@ -1,0 +1,130 @@
+<form action="/admin/studentSignUpdate?id=${(m.id)!}&navTabId=${(navTabId)!}"
+	method="post" class="pageForm"
+	onsubmit="return validateCallback(this, dialogAjaxDone)">
+	<div class="pageContent">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>
+					班级：
+				</dt>
+				<dd>
+					<label>
+						${(m.className)!}
+					</label>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					上课教师：
+				</dt>
+				<dd>
+					<label>
+						${(m.employeeName)!}
+					</label>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					上课时间：
+				</dt>
+				<dd>
+				<label>
+						${(m.gotime)!}
+				</label>				
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					下课时间：
+				</dt>
+				<dd>
+				<label>
+						${(m.overTime)!}
+				</label>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>
+					上课教室：
+				</dt>
+				<dd>
+					<label>
+						${(m.classroom)!}
+					</label>
+				</dd>
+			</dl>
+			<table class="list" width="100%">
+				<thead>
+					<tr>
+						<th>
+							学生
+						</th>
+						<th>
+							签到
+						</th>
+						<th>
+							是否有效
+						</th>
+						<th>
+							上课类型
+						</th>
+						<th>
+							备注
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="unitBox">
+						<td>
+							${(m.studentName)!}
+						</td>
+						<td>
+							${(loginSelect)!}
+						</td>
+						<td>
+							${(availdSelect)!}
+						</td>
+						<td>
+							${(m.typeStr)!}
+						</td>
+						<td>
+							<input type="text" name="remark" value="${(m.remark)!}" size="12">
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+					</tr>
+				</tfoot>
+			</table>
+			<div class="tabsFooter">
+				<div class="tabsFooterContent">
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="formBar">
+		<ul>
+			<li>
+				<div class="buttonActive">
+					<div class="buttonContent">
+						<button type="submit">
+							保存
+						</button>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="button">
+					<div class="buttonContent">
+						<button class="close" type="button">
+							关闭
+						</button>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</form>

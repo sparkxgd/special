@@ -1,0 +1,31 @@
+<div class="pageContent">
+	<form method="post" action="/admin/masterplatCssSave"
+		class="pageForm required-validate"
+		onsubmit="return validateCallback(this,dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="56">
+				<p>
+					<label>样式名称:</label>
+					<input name="dec" class="required" type="text" size="30" />
+				</p>
+				<p>
+					<label>代码:</label>
+					<input name="name" class="required" type="text" size="30" />
+				</p>
+		</div>
+			
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive">
+						<div class="buttonContent">
+							<button type="submit">保存</button>
+						</div>
+					</div></li>
+				<li><div class="button">
+						<div class="buttonContent">
+							<button type="button" class="close">取消</button>
+						</div>
+					</div></li>
+			</ul>
+		</div>
+	</form>
+</div>

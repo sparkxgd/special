@@ -1,0 +1,138 @@
+package com.zhixingbus.server.utils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+public class Utils {
+	static double pi = 3.14159265358979324; 
+	static double a = 6378245.0;  
+	static double ee = 0.00669342162296594323; 
+	/**
+	 * 计算地球上任意两点(经纬度)距离
+	 * 
+	 * @param long1 第一点经度
+	 * @param lat1 第一点纬度
+	 * @param long2 第二点经度
+	 * @param lat2 第二点纬度
+	 * @return 返回距离 单位：米
+	 */
+	public static double Distance(double long1, double lat1, double long2,double lat2) {
+		double a, b, R;
+		R = 6378137; // 地球半径
+		lat1 = lat1 * Math.PI / 180.0;
+		lat2 = lat2 * Math.PI / 180.0;
+		a = lat1 - lat2;
+		b = (long1 - long2) * Math.PI / 180.0;
+		double d;
+		double sa2, sb2;
+		sa2 = Math.sin(a / 2.0);
+		sb2 = Math.sin(b / 2.0);
+		d = 2
+				* R
+				* Math.asin(Math.sqrt(sa2 * sa2 + Math.cos(lat1)
+						* Math.cos(lat2) * sb2 * sb2));
+		return d;
+	}
+	
+	public static String createNewUUID(){
+		return UUID.randomUUID().toString().replace("-", "");
+	}
+	public static String createNumUUID(){
+        Calendar calendar = Calendar.getInstance();
+        int now_y = calendar.get(Calendar.YEAR);//得到年份
+        int now_m = calendar.get(Calendar.MONTH)+1;//得到月份
+        int now_d = calendar.get(Calendar.DATE);//得到月份中今天的号数
+        int now_h = calendar.get(Calendar.HOUR_OF_DAY);//得到一天中现在的时间，24小时制
+        int now_mm = calendar.get(Calendar.MINUTE);//得到分钟数
+        int now_s = calendar.get(Calendar.SECOND);//得到秒数
+        int now_ms = calendar.get(Calendar.MILLISECOND);//得到秒数
+        Random r=new Random();
+        int rod=r.nextInt(10000*10);
+        String id=now_y+""+now_m+""+now_d+""+now_h+""+now_mm+""+now_s+""+now_ms+""+rod;
+		return id;
+	}
+	
+	public static String createUUID(){
+		return UUID.randomUUID().toString();
+	}
+	//高德转换gps 经纬度数据
+	public static List<Double> transform(double wgLat, double wgLon)  
+    {  
+		List<Double> doubles = new ArrayList<Double>();
+        if (outOfChina(wgLat, wgLon))  
+        {  
+            return null;  
+        }  
+        double dLat = transformLat(wgLon - 105.0, wgLat - 35.0);  
+        double dLon = transformLon(wgLon - 105.0, wgLat - 35.0);  
+        double radLat = wgLat / 180.0 * pi;  
+        double magic = Math.sin(radLat);  
+        magic = 1 - ee * magic * magic;  
+        double sqrtMagic = Math.sqrt(magic);  
+        dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * pi);  
+        dLon = (dLon * 180.0) / (a / sqrtMagic * Math.cos(radLat) * pi);  
+//        mgLat = wgLat + dLat;  
+//        mgLon = wgLon + dLon;  
+        double lat = wgLat + dLat;
+        double lon = wgLon + dLon;
+        
+        doubles.add(lat);
+        doubles.add(lon);
+        return doubles;
+    }  
+
+    public static boolean outOfChina(double lat, double lon)  
+    {  
+        if (lon < 72.004 || lon > 137.8347)  
+            return true;  
+        if (lat < 0.8293 || lat > 55.8271)  
+            return true;  
+        return false;  
+    }  
+
+    public static double transformLat(double x, double y)  
+    {  
+        double ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));  
+        ret += (20.0 * Math.sin(6.0 * x * pi) + 20.0 * Math.sin(2.0 * x * pi)) * 2.0 / 3.0;  
+        ret += (20.0 * Math.sin(y * pi) + 40.0 * Math.sin(y / 3.0 * pi)) * 2.0 / 3.0;  
+        ret += (160.0 * Math.sin(y / 12.0 * pi) + 320 * Math.sin(y * pi / 30.0)) * 2.0 / 3.0;  
+        return ret;  
+    }  
+
+    public static double transformLon(double x, double y)  
+    {  
+        double ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));  
+        ret += (20.0 * Math.sin(6.0 * x * pi) + 20.0 * Math.sin(2.0 * x * pi)) * 2.0 / 3.0;  
+        ret += (20.0 * Math.sin(x * pi) + 40.0 * Math.sin(x / 3.0 * pi)) * 2.0 / 3.0;  
+        ret += (150.0 * Math.sin(x / 12.0 * pi) + 300.0 * Math.sin(x / 30.0 * pi)) * 2.0 / 3.0;  
+        return ret;  
+    }  
+    public static double getScaleDouble(double a,int scale){
+    	BigDecimal bigDecimal = new BigDecimal(a);
+    	return bigDecimal.setScale(scale,BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+	public static boolean isNumeric(String str){
+//	    Pattern pattern = Pattern.compile("[0-9]*");
+//	    return pattern.matcher(str).matches();   
+	 return true;
+	}
+	/**
+	 * 转换成角度
+	 * @return
+	 */
+	public static String aten2angle(String angle){
+		double r=0;
+		if(!StringUtil.isBlankOrEmpty(angle)){
+			r=180.0/Utils.pi*Double.valueOf(angle).doubleValue();
+			r=r*-1;
+		}
+		return String.valueOf(r);
+	}
+	public static void main(String[] args) {
+        System.out.println("Math：" + Utils.aten2angle("-3.14")); 
+	}
+}
